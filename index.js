@@ -1,6 +1,7 @@
 const Banchojs = require("bancho.js");
 const fs = require('fs')
 const { USERNAME, PASSWORD, prefix } = require('./config.json')
+var PouchDB = require('pouchdb-node');
 
 const client = new Banchojs.BanchoClient({ username: USERNAME, password: PASSWORD });
 client.commands = new Map()
@@ -28,18 +29,18 @@ fs.readdir("./commands/", (err, files) => {
 const getDefaultMode = require('./functions/get.js').defaultMode
 
 client.connect().then(() => {
-    console.log("We're online! Now listening for incoming messages.");
+    console.log("Now listening for incoming messages!");
     client.on("PM", (message) => {
         var today = new Date();
-        var dd = String(today.getDate()).padStart(2, '0');
-        var mm = String(today.getMonth() + 1).padStart(2, '0');
-        var yyyy = today.getFullYear();
+        var dd = String(today.getDate()).padStart(2, '0')
+        var mm = String(today.getMonth() + 1).padStart(2, '0')
+        var yyyy = today.getFullYear()
         var hours = today.getHours()
         var mins = today.getMinutes().toString().padStart(2, '0')
 
         var todays = mm + '/' + dd + '/' + yyyy + ' ' + hours + ":" + mins;
         console.log(`${todays} | ${message.user.ircUsername}: ${message.message}`)
-        if (message.user.ircUsername == USERNAME) return
+        if (message.self) return
         if (message.message[0] != prefix) return
 
 
@@ -63,5 +64,5 @@ client.connect().then(() => {
             cooldown.delete(message.user.ircUsername)
             cooldowng.delete(message.user.ircUsername)
         }, cdseconds * 1000)
-    });
+    })
 }).catch(console.error);
