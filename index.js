@@ -1,7 +1,6 @@
 const Banchojs = require("bancho.js");
 const fs = require('fs')
 const { USERNAME, PASSWORD, prefix } = require('./config.json')
-var PouchDB = require('pouchdb-node');
 
 const client = new Banchojs.BanchoClient({ username: USERNAME, password: PASSWORD });
 client.commands = new Map()

@@ -1,8 +1,11 @@
 {
     "osu": [
-        "alternate", "tech", "classic", "jump", "reading", "stream"
+        "alternate", "tech", "classic", "jump", "reading", "stream", "elite", "experimental", "puzzle", "balanced", "marathons", "tag", "art"
     ],
     "mania": [
         "classic", "streams", "jacks", "ln", "sv", "tech"
+    ],
+    "taiko": [
+    	"futsu", "muzukashii", "oni"
     ]
 }
