@@ -1,7 +1,7 @@
 const mapRating = require('../functions/details.js').mapRating
 const mapLength = require('../functions/details.js').mapLength
-const randomMap = require('../functions/get.js').randomMap
-const getDefaultMode = require('../functions/get.js').defaultMode
+const randomMap = require('../functions/brain.js').randomMap
+const getDefaultMode = require('../functions/brain.js').defaultMode
 
 module.exports.run = async (message, args) => {
     getDefaultMode(message.user.ircUsername, function(mode) {
