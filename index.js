@@ -1,7 +1,6 @@
 const Banchojs = require("bancho.js");
 const fs = require('fs')
 const { USERNAME, PASSWORD, prefix } = require('./config.json')
-const getDefaultMode = require('./functions/brain.js').defaultMode
 
 const client = new Banchojs.BanchoClient({ username: USERNAME, password: PASSWORD });
 client.commands = new Map()
@@ -26,7 +25,7 @@ fs.readdir("./commands/", (err, files) => {
     })
 })
 
-client.connect().then(() => {
+/*client.connect().then(() => {
     console.log("Logged in");
     client.on("PM", (message) => {
     	var today = new Date();
@@ -63,7 +62,7 @@ client.connect().then(() => {
             cooldowng.delete(message.user.ircUsername)
         }, cdseconds * 1000)
     })
-}).catch(console.error);
+}).catch(console.error);*/
 
 
 
@@ -75,43 +74,28 @@ client.connect().then(() => {
 var PouchDB = require('pouchdb-node')
 const addMap = require('./functions/brain.js').addMap
 
-const mapRating = require('./functions/details.js').mapRating
-const mapLength = require('./functions/details.js').mapLength
-const randomMap = require('./functions/brain.js').randomMap
+const mapRating = require('./functions/brain.js').mapRating
+const mapLength = require('./functions/brain.js').mapLength
+const getRandomMap = require('./functions/brain.js').getRandomMap
+const arrayInArray = require('./functions/brain.js').arrayInArray
 
-const readline = require('readline').createInterface({
-	input: process.stdin,
-	output: process.stdout
-});
+const readline = require('readline').createInterface({ input: process.stdin, output: process.stdout });
 
 var db_maps = new PouchDB('DB_Maps')
 
-readline.on('line', (input) => {
-	//addMap(1436913, function (msg) { console.log("hmm", msg) })
+const labels = require("./labels.json")
 
-	//addMap(["osu", "tech", 115193], function (msg) { console.log(msg) })
-	
-	/*getDefaultMode("AuracleTech", function(mode) {
-        randomMap(["tech"], "osu", function (err, map) {
-            if (map == null || map.length == 0) {
-                console.log('Sorry, no match was found with these criterias.')
-                return
-            }
-            console.log(`[https://osu.ppy.sh/b/${map.id} ${map.artist} - ${map.title} [${map.version}]] | ${map.genre[0].toUpperCase() + map.genre.slice(1)} | ${mapRating(map.rating)} ★ | ${mapLength(map.length)} ♪ | BPM: ${map.bpm}`)
-        })
-    })*/
+readline.on('line', async (input) => {
 
-    /*db_maps.allDocs({ include_docs: true, descending: true }, (err, doc) => {
-	    doc.rows.forEach(e => {
-	        console.log(e.doc);
-	    });
-	}).catch((err) => {
-	    console.error(err);
-	})
+	var args = ["tech", "osu", "cake", "maniaque"]
+	var argsAddMap = ["osu", "tech", 115193]
 
-	db_maps.get('280751f6').then(function(doc) {
-	  console.log("MEME", doc)
-	}).catch((err) => {
-	    console.error(err);
-	})*/
+	//getRandomMap(args, function (msg) { console.log("getRandomMap", msg) })
+
+	addMap(argsAddMap, function (msg) { console.log("addMap", msg) })
+
+	//Amount of maps in the DB_Maps
+	//var meme; db_maps.info().then(async function (info) { meme = info.doc_count;console.log(meme) })
 });
+
+process.on('uncaughtException', function(err) { console.log('Caught exception: ' + err) });

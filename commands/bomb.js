@@ -1,5 +1,5 @@
-const mapRating = require('../functions/details.js').mapRating
-const mapLength = require('../functions/details.js').mapLength
+const mapRating = require('../functions/brain.js').mapRating
+const mapLength = require('../functions/brain.js').mapLength
 const bombRandomMap = require('../functions/brain.js').bombRandomMap
 const getDefaultMode = require('../functions/brain.js').defaultMode
 

@@ -1,64 +1,38 @@
 var PouchDB = require('pouchdb-node')
 var db_maps = new PouchDB('DB_Maps')
 var db_settings = new PouchDB('DB_Settings')
-const genres = require("../genres.json")
-const getBeatmaps = require('./details.js').getBeatmaps
+const labels = require("../labels.json")
+const modesToAPI = { osu: 0, taiko: 1, ctb: 2, mania: 3 }
 
-module.exports.randomMap = async function randomMap(args, mode, callback) {
-	db_maps.allDocs({mode : mode}, function (err, res) {
-		if (!args || args.length == 0) {
-			let random = res.rows[Math.floor(Math.random() * res.rows.length)].main_diff
-			db_maps.allDocs({id : random}, function (err, diff) {
-				if (err)
-					callback(err, null)
-				else
-					callback(null, diff.rows[0])
-			})
-		} else {
-			db_maps.allDocs({mode : mode}, function (err, diffs) {
-				let maps = diffs.rows;
-				args.forEach((criteria) => {
-					if (isNaN(criteria)) {
-						if (genres.osu.includes(criteria) || genres.mania.includes(criteria)) {
-							if (genres[mode].includes(criteria))
-								maps = maps.filter((map) => map.doc.genre == criteria)
-						} else {
-							let allM = res.rows
-							allM = Object.values(allM).filter((map) =>
-								map.doc.artist.toLowerCase().includes(criteria.toLowerCase()) ||
-								map.doc.title.toLowerCase().includes(criteria.toLowerCase())
-							)
-							let newMaps = []
-							diffs = [];
-							allM.forEach((e) => {
-								diffs.push(e.main_diff)
-							})
-							maps.forEach((m) => {
-								if (diffs.includes(m.id))
-									newMaps.push(m)
-							})
-							maps = newMaps
-						}
-					} else {
-						if (criteria < 10 && criteria > 0)
-							maps = maps.filter((map) => Math.floor(map.doc.rating) == criteria);
-						else
-							maps = maps.filter((map) => Math.ceil(map.doc.bpm / 10) * 10 == criteria);
-					}
-				})
-				let randomDiff = null
-				if (maps.doc.length != 0)
-					randomDiff = maps[Math.floor(Math.random() * maps.doc.length)]
-				if (err)
-					callback(err, null)
-				else
-					callback(null, randomDiff)
-			})
-		}
+async function getRandomMap(args, callback) {
+
+	var criterias = getCriterias(args);
+
+	let map, ids = [], docs = await db_maps.allDocs({ include_docs: true })
+
+	docs.rows.forEach(row => {
+		criterias.forEach(mode => {
+			if(row.doc.labels.hasOwnProperty(mode)) {
+				if(criterias[mode].length > 0) {
+					criterias[mode].forEach(genre => { if(row.doc.labels.includes(genre)) ids.push(row.doc._id) })
+				} else ids.push(row.doc._id)
+			}
+		})
 	})
-}
 
-module.exports.bombRandomMap = async function bombRandomMap(args, mode, callback) {
+	if(ids.length < 1) return callback(`No match was found with these criterias`)
+	map = await db_maps.get(ids[Math.floor(Math.random() * ids.length)])
+	return callback(`[https://osu.ppy.sh/b/${map.id} ${map.artist} - ${map.title} [${map.version}]] | ${map.genre.join(" ")} | ${mapRating(map.rating)} ★ | ${mapLength(map.length)} ♪ | BPM: ${map.bpm}`)
+	/*TODO map.doc.artist.toLowerCase().includes(criteria.toLowerCase()) ||
+	map.doc.title.toLowerCase().includes(criteria.toLowerCase())
+	if (criteria < 10 && criteria > 0)
+	maps = maps.filter((map) => Math.floor(map.doc.rating) == criteria);
+	maps = maps.filter((map) => Math.ceil(map.doc.bpm / 10) * 10 == criteria);*/
+}
+module.exports.getRandomMap = getRandomMap
+
+async function bombRandomMap(args, mode, callback) {
+
 	db_maps.allDocs({mode : mode}, function (err, res) {
 		if (!args || args.length == 0) {
 			db_maps.allDocs({}, function (err, res) {
@@ -85,16 +59,16 @@ module.exports.bombRandomMap = async function bombRandomMap(args, mode, callback
 				args.forEach((criteria) => {
 					if (isNaN(criteria)) {
 						if (
-							genres.osu.includes(criteria) ||
-							genres.mania.includes(criteria)
+							labels.osu.includes(criteria) ||
+							labels.mania.includes(criteria)
 						) {
 							if (mode == "osu") {
-								if (genres.osu.includes(criteria)) {
+								if (labels.osu.includes(criteria)) {
 									maps = maps.filter((map) => map.genre == criteria);
 								}
 							}
 							if (mode == "mania") {
-								if (genres.mania.includes(criteria)) {
+								if (labels.mania.includes(criteria)) {
 									maps = maps.filter((map) => map.genre == criteria);
 								}
 							}
@@ -105,7 +79,7 @@ module.exports.bombRandomMap = async function bombRandomMap(args, mode, callback
 									(map.artist
 										.toLowerCase()
 										.includes(criteria.toLowerCase()) &&
-										map.mode == mode) ||
+										map.labels == mode) ||
 									map.title.toLowerCase().includes(criteria.toLowerCase())
 							);
 							let newMaps = [];
@@ -151,34 +125,31 @@ module.exports.bombRandomMap = async function bombRandomMap(args, mode, callback
 		}
 	})
 }
+module.exports.bombRandomMap = bombRandomMap
 
-module.exports.defaultMode = async function getDefaultMode(username, callback) {
-	await db_settings.allDocs({username : username}, function (err, res) {
-		if (res.rows.length > 0)
-			callback(res.rows[0].mode);
-		else
-			callback("osu");
+module.exports.addMap = addMap
+async function addMap(args, callback) {
+
+	var criterias = getCriterias(args)
+	var hasGenreSpecified = false, id = false, beatmapsDB = await db_maps.allDocs({ include_docs: true }), newBeatmaps
+	criterias.forEach(mode => { if(mode.length > 0) hasGenreSpecified = true })
+
+	if(!hasGenreSpecified) return callback("You need at least one genre. Valid genres are : " + labels[mode].join(' '))
+
+	args.forEach(arg => { if(typeof(arg) === 'number') id = arg })
+
+	if(!id) return callback("You need to specify a map set ID")
+
+	criterias.forEach(mode => {	newBeatmaps.push(getBeatmaps(id, mode)) })
+	if(beatmaps.length < 1) return callback("Invalid beatmap set ID : No maps found");
+
+	beatmapsDB.rows.forEach(row => { if(row.doc.beatmapSetId == beatmapSetId) mapsAlreadyInDB.push(row.doc.id) })
+	//.catch((err) => { console.error("Error Brain.alreadyPresentMaps:" + err) })
+	newBeatmaps.forEach(async function(beatmap) {
+		if(!beatmapsDB.includes(beatmap.id))
+    		await db_maps.post({ _id: beatmap.hash, beatmapSetId: beatmap.beatmapSetId, labels: labels, id: beatmap.id, artist: beatmap.artist, title: beatmap.title, rating: beatmap.difficulty.rating, bpm: beatmap.bpm, length: beatmap.length.total, version: beatmap.version, approvalStatus: beatmap.approvalStatus, hash: beatmap.hash })
+	    //TODO: else (map is already present) : UPDATE MAP => IN CASE THERE'S MAP UPDATE OR SUM ON THE BEATMAP
 	})
-}
-
-module.exports.addMap = async function addMap(args, callback) {
-	if(!args || args.length != 3) return callback("You need 3 arguments : Mode Genre beatmapSetID")
-	var mode = args[0].toLowerCase(), genre = args[1].toLowerCase(), beatmapSetId = args[2]
-	if(!genres.hasOwnProperty(mode)) return callback("Invalid mode. Valid modes are : " + Object.keys(genres).join(' '))
-	if(!genres[mode].includes(genre)) return callback("Invalid genre. Valid genres are : " + genres[mode].join(' '))
-
-	if(isNaN(beatmapSetId)) return callback("The map ID must be a number")
-	var beatmaps = await getBeatmaps(beatmapSetId).then((beatmaps) => { if(beatmaps.length < 1) return callback("Invalid beatmap set ID : No maps found"); else return beatmaps })
-
-	beatmaps.forEach(async function(beatmap) { //TODO: CHECK IF EACH BEATMAPS HAS THE MENTIONNED MODE/GENRES TYPE => IF NOT ADD THE MODES OR GENRES
-    	await db_maps.get(beatmap.id).then(function(doc) {
-			//TODO: UPDATE SYSTEM IN CASE THERE'S NEWS OR SOMETHING ON THE BEATMAP
-		}).catch(async function(err) {
-	    	await db_maps.put({ beatmapSetId: beatmap.beatmapSetId, mode: mode, genre: genre, _id: beatmap.id, artist: beatmap.artist, title: beatmap.title,
-	    		rating: beatmap.difficulty.rating, bpm: beatmap.bpm, length: beatmap.length.total, version: beatmap.version, approvalStatus: beatmap.approvalStatus, hash: beatmap.hash })
-	    		.catch((err) => { console.log("Error Brain.AddMap:" + err); })
-		})
-    })
 	return callback("Map successfully added")
 }
 
@@ -210,3 +181,43 @@ if (args[0] == "osu" || args[0] == "mania") {
 	}
 
 */
+
+const { APIKEY } = require('../config.json')
+const osu = require('node-osu');
+var osuApi = new osu.Api(APIKEY, { notFoundAsError: false, completeScores: true })
+
+async function getBeatmaps(beatmapSetId, mode) {
+	return await osuApi.getBeatmaps({ s: beatmapSetId, m: modesToAPI[mode] }).then((beatmaps) => { return beatmaps })
+}
+module.exports.getBeatmaps = getBeatmaps;
+
+function mapLength(nombre) {
+    var heures = Math.floor(nombre / 60 / 60)
+    var minutes = Math.floor(nombre / 60) - (heures * 60)
+    var secondes = nombre % 60
+    var duree = minutes.toString().padStart(2, '0') + ':' + secondes.toString().padStart(2, '0')
+    return duree
+}
+module.exports.mapLength = mapLength
+
+function mapRating(nombre) {
+    starRating = nombre * 100
+    starRating = Math.round(starRating)
+    starRating = starRating / 100
+    return starRating
+}
+module.exports.mapRating = mapRating
+
+function getCriterias(args) {
+
+	var criterias = [];
+	args.forEach(arg => { if(typeof arg === 'string') arg = arg.toLowerCase(); if(labels.hasOwnProperty(arg)) criterias.push(Array.from(arg)); })
+	if(criterias.length < 1) criterias.push("osu") //TODO : Retrieve player option -> Default player mode prefference
+
+	criterias.forEach(mode => {
+		args.forEach(arg => { console.log(`${criterias[mode]}.push(${arg});`); if(typeof arg === 'string') arg = arg.toLowerCase(); if(labels[mode] != null && labels[mode].includes(arg)) criterias[mode].push(arg); })
+	})
+
+	return criterias;
+}
+module.exports.getCriterias = getCriterias
