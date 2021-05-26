@@ -1,24 +1,6 @@
-const mapRating = require('../functions/brain.js').mapRating
-const mapLength = require('../functions/brain.js').mapLength
-const bombRandomMap = require('../functions/brain.js').bombRandomMap
-const getDefaultMode = require('../functions/brain.js').defaultMode
+const getRandomMaps = require('../functions/brain.js').getRandomMaps
 
-module.exports.run = async (message, args) => {
-    getDefaultMode(message.user.ircUsername, function (mode) {
-        bombRandomMap(args, mode, function (err, maps) {
-            if (maps == null || maps.length == 0) {
-                message.user.sendMessage('Sorry, no match was found with these criterias.')
-                return
-            }
-            if (maps[0] == undefined || maps.length < 3) {
-                message.user.sendMessage('Sorry, no enough match was found with these criterias. Please try with !r.')
-                return
-            }
-            maps.forEach(map => {
-                message.user.sendMessage(`[https://osu.ppy.sh/b/${map.id} ${map.artist} - ${map.title} [${map.version}]] | ${map.genre[0].toUpperCase() + map.genre.slice(1)} | ${mapRating(map.rating)} ★ | ${mapLength(map.length)} ♪ | BPM: ${map.bpm}`)
-            });
-        })
-    })
-}
+// TODO : Add argument selector to check the amount of request bombed maps
+module.exports.run = async (message, args) => { getRandomMaps(args, function (msg) { message.user.sendMessage(msg) }, 5) }
 
 module.exports.help = { name: "b", alias: 'bomb' }

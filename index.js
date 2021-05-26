@@ -1,6 +1,8 @@
 const Banchojs = require("bancho.js");
 const fs = require('fs')
 const { USERNAME, PASSWORD, prefix } = require('./config.json')
+const log = require('./functions/brain.js').log
+const fsExtra = require('fs-extra')
 
 const client = new Banchojs.BanchoClient({ username: USERNAME, password: PASSWORD });
 client.commands = new Map()
@@ -9,93 +11,93 @@ let cooldowng = new Set()
 let cooldown = new Set()
 let cdseconds = 10
 
-fs.readdir("./commands/", (err, files) => {
-    if (err) console.log(err)
+fsExtra.emptyDirSync('pollution')
 
+fs.readdir("./commands/", (err, files) => {
+    if (err) log(err)
     let jsfile = files.filter(f => f.split(".").pop() === "js")
-    if (jsfile.length <= 0) {
-        console.log("No commands find")
-        return
-    }
+    if (jsfile.length <= 0) return log('No commands found')
     jsfile.forEach((f, i) => {
         let props = require(`./commands/${f}`)
-        console.log(`Loaded ${f}`)
+        log(`Loaded ${f}`)
         client.commands.set(props.help.name, props)
         client.commands.set(props.help.alias, props)
     })
 })
 
-/*client.connect().then(() => {
-    console.log("Logged in");
+client.connect().then(() => {
+    log("Logged in");
     client.on("PM", (message) => {
-    	var today = new Date();
+        setTimeout(() => {
+            cooldown.delete(message.user.ircUsername)
+            cooldowng.delete(message.user.ircUsername)
+        }, cdseconds * 1000)
+    	var today = new Date()
         var dd = String(today.getDate()).padStart(2, '0')
         var mm = String(today.getMonth() + 1).padStart(2, '0')
         var yyyy = today.getFullYear()
         var hours = today.getHours()
         var mins = today.getMinutes().toString().padStart(2, '0')
-
-        var todays = mm + '/' + dd + '/' + yyyy + ' ' + hours + ":" + mins;
-        console.log(`${todays} | ${message.user.ircUsername}: ${message.message}`)
+        var todays = mm + '/' + dd + '/' + yyyy + ' ' + hours + ":" + mins
+        log(`${todays} | ${message.user.ircUsername}: ${message.message}`, message.user.ircUsername == "AuracleTech" ? 1 : 0)
         if (message.self) return
-        if (message.message[0] != prefix) return
 
+        if (message.message[0] != prefix) {
+            cooldowng.add(message.user.ircUsername)
+        	return calcPerf(message.message, function (msg) { message.user.sendMessage(msg) })
+        }
 
         if (cooldowng.has(message.user.ircUsername)) return
         if (cooldown.has(message.user.ircUsername)) {
             cooldowng.add(message.user.ircUsername)
-            message.user.sendMessage(`Please wait ${cdseconds} seconds before sending another command.`)
-            return
+            return message.user.sendMessage(`Please wait ${cdseconds} seconds before sending another command.`)
         }
 
-        let args = message.message.slice(prefix.length).split(/ +/);
+        let args = message.message.toLowerCase().slice(prefix.length).split(/ +/);
         args.shift()
         let command = message.message.split(" ")
         let cmd = command[0].toLowerCase()
         let commandfile = client.commands.get(cmd.slice(prefix.length))
-        if (commandfile) {
+        if(commandfile) {
             cooldown.add(message.user.ircUsername)
-            commandfile.run(message, args)
+            return commandfile.run(message, args)
         }
-        setTimeout(() => {
-            cooldown.delete(message.user.ircUsername)
-            cooldowng.delete(message.user.ircUsername)
-        }, cdseconds * 1000)
     })
-}).catch(console.error);*/
+})
 
+process.on('uncaughtException', function(err) { log('Caught exception: ' + err.stack, 3) });
 
+// AURACLE'S DEBUG MESS
 
-
-
-
-
-/* ALL TEMPORARY DEBUG STUFF */
 var PouchDB = require('pouchdb-node')
 const addMap = require('./functions/brain.js').addMap
-
 const mapRating = require('./functions/brain.js').mapRating
 const mapLength = require('./functions/brain.js').mapLength
-const getRandomMap = require('./functions/brain.js').getRandomMap
+const getRandomMaps = require('./functions/brain.js').getRandomMaps
 const arrayInArray = require('./functions/brain.js').arrayInArray
-
+const setSettings = require('./functions/brain.js').setSettings
+const complain = require('./functions/brain.js').complain
+const calcPerf = require('./functions/brain.js').calcPerf
 const readline = require('readline').createInterface({ input: process.stdin, output: process.stdout });
-
 var db_maps = new PouchDB('DB_Maps')
-
-const labels = require("./labels.json")
+var db_settings = new PouchDB('DB_Settings')
 
 readline.on('line', async (input) => {
+	var args = ["osu", "cake", "2*"]
+	var argsAddMap = ["osu", "tech", 1080535] 
+	var argsSetSettings = ["gamemode", "osu"]
+	var argsComplain = ["eat", "my", "shit", "fucking", "cunt", "you", "garbage", "of", "a", "human"]
+	var messageLink = "is listening to [osu.ppy.sh/beatmapsets/1002271#/2097898 Bliitzit - Team Magma & Aqua Leader Battle Theme (Unofficial)]"
+	var messageLink2 = "is editting [osu.ppy.sh/b/738063 Reol - No title [Lust's Insane]]"
+	var taikoMap = "is eating [osu.ppy.sh/beatmapsets/1311915#mania/2719063 sum weird] +MEME Taiko>"
 
-	var args = ["tech", "osu", "cake", "maniaque"]
-	var argsAddMap = ["osu", "tech", 115193]
+	//calcPerf(taikoMap, function (msg) { log(msg, 1) })
+	//complain("AuracleTech", argsComplain, function (msg) { log(msg) })
+	//log("suck my tiny little squirrel")
+	//getRandomMaps(args, function (msg) { log(msg) }, 5)
+	//addMap(argsAddMap, function (msg) { log(msg) })
+	//setSettings("AuracleTech", argsSetSettings, function (msg) { log("setSettings", msg) })
 
-	//getRandomMap(args, function (msg) { console.log("getRandomMap", msg) })
-
-	addMap(argsAddMap, function (msg) { console.log("addMap", msg) })
-
-	//Amount of maps in the DB_Maps
-	//var meme; db_maps.info().then(async function (info) { meme = info.doc_count;console.log(meme) })
+	//db_maps.info().then(async function (info) { log(info.doc_count) }) //Amount of maps in db_maps
+	//db_settings.info().then(async function (info) { log(info.doc_count) }) //Amount of user settings in db_settings
 });
-
-process.on('uncaughtException', function(err) { console.log('Caught exception: ' + err) });
