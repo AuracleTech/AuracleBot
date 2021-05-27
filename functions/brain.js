@@ -84,7 +84,7 @@ async function setSettings(name, args, callback){
 	switch(args[0]) {
 		case "gamemode":
 			var argGamemodes = await detectGamemodes(args[1].split())
-			if(Object.keys(argGamemodes).length < 1) { callback("You need at least one mode. Valid modes are : " + Object.keys(labels).join(' ')); break }
+			if(Object.keys(argGamemodes).length < 1) { callback("You need at least one mode. Valid modes are : " + Object.keys(osu_gamemodes.gamemodes).join(' ')); break }
 			argGamemodes = Object.keys(argGamemodes)[0]
 			db_settings.upsert(name, function (doc) {
 				doc.default_gamemode = argGamemodes
@@ -188,7 +188,6 @@ async function CalculatePerformancePoint(resolve, filePath, accuracy, mods = [],
     });
 };
 
-
 module.exports.calcPerf = calcPerf
 async function calcPerf(command, callback){
     var urls = await getUrls(command, {requireSchemeOrWww: false})
@@ -200,36 +199,37 @@ async function calcPerf(command, callback){
         beatmapID = beatmapID[beatmapID.length - 1].replace(/\D/g,'');
         if(isNaN(beatmapID)) return;
         // TODO : MAKE SURE THIS SHIT WORKS SEEMS SKETCHY AF MA DOOD
-        var args = command.split("+").join("-").split("-"), currentMods = [], modsPrinteable = "";
-        for (let arg of args) if(osu_mods.getBinary(arg)) currentMods.push(osu_mods.getBinary(arg))
-        var filePath = `./pollution/${(new Date().getTime() + ".osu")}`;
-
-        var mode = (command.match(/(?<=\<).+?(?=\>)/)) ? (labels.hasOwnProperty(command.match(/(?<=\<).+?(?=\>)/)[0].toLowerCase()) ? command.match(/(?<=\<).+?(?=\>)/)[0].toLowerCase() : "") : ""
-        var beatmap = await getBeatmaps(null, beatmapID, mode, currentMods)
-        if(beatmap.length < 1) return callback(`Invalid beatmap ID : No maps avalaible on this ID for the mode`)
-        mode = (beatmap[0].mode.toLowerCase() != 'standard') ? beatmap[0].mode.toLowerCase() : 'osu'
+        var args = command.split("+").join("-").split("-"), activeMods = [], modsPrinteable = "", gamemode = "";
+        for (let arg of args) if(osu_mods.getBinary(arg)) activeMods.push(osu_mods.getBinary(arg))
+        for (let arg of args) if(osu_gamemodes.isGamemode(arg.replace('<', '').replace('>', ''))) gamemode = arg
+        var filePath = `./pollution/${new Date().getTime()}.osu`;
+        
+        var beatmap = await getBeatmaps(null, beatmapID, gamemode, activeMods)
+        if(beatmap.length < 1) return callback(`Invalid beatmap ID : No maps avalaible on this ID for the gamemode`)
+        gamemode = (beatmap[0].mode.toLowerCase() != 'standard') ? beatmap[0].mode.toLowerCase() : 'osu'
 
         download(`https://osu.ppy.sh/osu/${beatmapID}`, filePath, () => {
-            var acc100 = new Promise((resolve, reject) => { CalculatePerformancePoint(resolve, filePath, 100, currentMods, mode) })
+            var acc100 = new Promise((resolve, reject) => { CalculatePerformancePoint(resolve, filePath, 100, activeMods, gamemode) })
             // TODO : Find a better cleaner way of doing all that crap
-            if (mode != "mania") {
-                var acc99 = new Promise((resolve, reject) => { CalculatePerformancePoint(resolve, filePath, 99, currentMods, mode) })
-                var acc98 = new Promise((resolve, reject) => { CalculatePerformancePoint(resolve, filePath, 98, currentMods, mode) })
-                var acc97 = new Promise((resolve, reject) => { CalculatePerformancePoint(resolve, filePath, 97, currentMods, mode) })
-                var acc95 = new Promise((resolve, reject) => { CalculatePerformancePoint(resolve, filePath, 95, currentMods, mode) })
+            if (gamemode != "mania") {
+                var acc99 = new Promise((resolve, reject) => { CalculatePerformancePoint(resolve, filePath, 99, activeMods, gamemode) })
+                var acc98 = new Promise((resolve, reject) => { CalculatePerformancePoint(resolve, filePath, 98, activeMods, gamemode) })
+                var acc97 = new Promise((resolve, reject) => { CalculatePerformancePoint(resolve, filePath, 97, activeMods, gamemode) })
+                var acc95 = new Promise((resolve, reject) => { CalculatePerformancePoint(resolve, filePath, 95, activeMods, gamemode) })
             }
 
             Promise.all([acc100, acc99, acc98, acc97, acc95]).then((values) => {
-                var isDoubleTime = osu_mods.hasDoubleTime(currentMods)
+                var isDoubleTime = osu_mods.hasDoubleTime(activeMods)
                 // TODO : Calcul BPM and length depending on HT, NC and DT, maybe modify mapLength function
-                var isHalfTime = osu_mods.hasHalfTime(currentMods)
+                var isHalfTime = osu_mods.hasHalfTime(activeMods)
                 var duration = (isDoubleTime) ? Math.round(beatmap[0].length.total/1.5) : beatmap[0].length.total
                 var bpm = (isDoubleTime) ? Math.round(beatmap[0].bpm*1.5) : beatmap[0].bpm;
-                for (let mod of currentMods) modsPrinteable += `${osu_mods.getAbbreviation(mod)} `
-                var AR = (mode == "osu") ? ` ${mapRating(values[0].AR)}` : ""
-                var OD = (mode == "osu") ? ` ${mapRating(values[0].OD)}` : ""
-                if(mode == 'mania') return callback(`[https://osu.ppy.sh/b/${beatmap[0].id} ${beatmap[0].artist} - ${beatmap[0].title} [${beatmap[0].version}]] ${modsPrinteable}| ${mode.toUpperCase()} | 100% ${Math.round(values[0].pp)}pp | ${mapLength(duration)} ★${mapRating(beatmap[0].difficulty.rating)} ♫${bpm} AR${AR} OD${OD}`)
-                else return callback(`[https://osu.ppy.sh/b/${beatmap[0].id} ${beatmap[0].artist} - ${beatmap[0].title} [${beatmap[0].version}]] ${modsPrinteable}| ${mode.toUpperCase()} | 95% ${Math.round(values[4].pp)}pp | 97% ${Math.round(values[3].pp)}pp | 98% ${Math.round(values[2].pp)}pp | 99% ${Math.round(values[1].pp)}pp | 100% ${Math.round(values[0].pp)}pp | ${mapLength(duration)} ★${mapRating(beatmap[0].difficulty.rating)} ♫${bpm} AR${AR} OD${OD}`)
+                for (let mod of activeMods) modsPrinteable += `${osu_mods.getAbbreviation(mod)} `
+                if(modsPrinteable != "") modsPrinteable += "| "
+                var AR = (gamemode == "osu") ? ` ${mapRating(values[0].AR)}` : ""
+                var OD = (gamemode == "osu") ? ` ${mapRating(values[0].OD)}` : ""
+                if(gamemode == 'mania') return callback(`[https://osu.ppy.sh/b/${beatmap[0].id} ${beatmap[0].artist} - ${beatmap[0].title} [${beatmap[0].version}]] ${modsPrinteable}${gamemode.toUpperCase()} | 100% ${Math.round(values[0].pp)}pp | ${mapLength(duration)} ★${mapRating(beatmap[0].difficulty.rating)} ♫${bpm} AR${AR} OD${OD}`)
+                else return callback(`[https://osu.ppy.sh/b/${beatmap[0].id} ${beatmap[0].artist} - ${beatmap[0].title} [${beatmap[0].version}]] ${modsPrinteable}${gamemode.toUpperCase()} | 95% ${Math.round(values[4].pp)}pp | 97% ${Math.round(values[3].pp)}pp | 98% ${Math.round(values[2].pp)}pp | 99% ${Math.round(values[1].pp)}pp | 100% ${Math.round(values[0].pp)}pp | ${mapLength(duration)} ★${mapRating(beatmap[0].difficulty.rating)} ♫${bpm} AR${AR} OD${OD}`)
             })
         })
     }

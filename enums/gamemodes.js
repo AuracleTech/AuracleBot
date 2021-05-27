@@ -18,7 +18,7 @@ function isGenre(genre, gamemode){
 }
 
 function isGamemode(gamemode){
-    if (gamemodes.hasOwnProperty(gamemode)) return true
+    if (gamemodes.hasOwnProperty(gamemode.toLowerCase())) return true
     else return false
 }
 

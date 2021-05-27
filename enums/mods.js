@@ -34,25 +34,31 @@ const binaries = {
 }
 
 const groups = {
-    "KeyMod" : [ "Key1", "Key2", "Key3", "Key4", "Key5", "Key6", "Key7", "Key8", "Key9", "KeyCoop" ], // To convert to binaries
-    "FreeModAllowed" : [ "NoFail", "Easy", "Hidden", "HardRock", "SuddenDeath", "Flashlight", "FadeIn", "Relax", "Relax2", "SpunOut", "KeyMod" ], // To convert to binaries
-    "ScoreIncreaseMods" : [ "Hidden", "HardRock", "DoubleTime", "NightCore", "Flashlight", "FadeIn" ], // To convert to binaries
+    "KeyMod" : [ "Key1", "Key2", "Key3", "Key4", "Key5", "Key6", "Key7", "Key8", "Key9", "KeyCoop" ], // TODO : To convert to binaries
+    "FreeModAllowed" : [ "NoFail", "Easy", "Hidden", "HardRock", "SuddenDeath", "Flashlight", "FadeIn", "Relax", "Relax2", "SpunOut", "KeyMod" ], // TODO : To convert to binaries
+    "ScoreIncreaseMods" : [ "Hidden", "HardRock", "DoubleTime", "NightCore", "Flashlight", "FadeIn" ], // TODO : To convert to binaries
     "AffectScore" : [ 8, 16, 1, 2, 256, 64, 512, 1024, 1048576 ],
 }
 
 function getBinary(mod){
     for (const [key, values] of Object.entries(binaries))
-        for (let arg of values) if (arg.toLowerCase() == mod) return key
+        for (let arg of values) if (arg.toLowerCase() == mod.toLowerCase()) return key
     return
 }
 
 function getFullname(mod){
-    for (const [key, values] of Object.entries(binaries)) if (key == mod || values.includes(mod)) return value[1]
+    // TODO : Optimize this a tiny bit
+    for (const [key, values] of Object.entries(binaries))
+         for (let arg of values)
+           if (key == mod || arg.toLowerCase().includes(mod.toLowerCase())) return values[0]
     return
 }
 
 function getAbbreviation(mod){
-    for (const [key, values] of Object.entries(binaries)) if (key == mod || values.includes(mod)) return value[2]
+    // TODO : Optimize this a tiny bit
+    for (const [key, values] of Object.entries(binaries))
+        for (let arg of values)
+            if (key == mod || arg.toLowerCase().includes(mod.toLowerCase())) return values[1]
     return
 }
 

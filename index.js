@@ -2,7 +2,6 @@ const Banchojs = require("bancho.js");
 const fs = require('fs')
 const { USERNAME, PASSWORD, prefix } = require('./config.json')
 const log = require('./functions/brain.js').log
-const fsExtra = require('fs-extra')
 
 const client = new Banchojs.BanchoClient({ username: USERNAME, password: PASSWORD });
 client.commands = new Map()
@@ -11,7 +10,10 @@ let cooldowng = new Set()
 let cooldown = new Set()
 let cdseconds = 10
 
-fsExtra.emptyDirSync('pollution')
+var lastCommandHistory = {} // TODO : NOW
+
+var files = fs.readdirSync('pollution')
+for (let file of files) if(file != '.keep') fs.unlinkSync('pollution/' + file)
 
 fs.readdir("./commands/", (err, files) => {
     if (err) log(err)
@@ -89,9 +91,10 @@ readline.on('line', async (input) => {
 	var argsComplain = ["eat", "my", "shit", "fucking", "cunt", "you", "garbage", "of", "a", "human"]
 	var messageLink = "is listening to [osu.ppy.sh/beatmapsets/1002271#/2097898 Bliitzit - Team Magma & Aqua Leader Battle Theme (Unofficial)]"
 	var messageLink2 = "is editting [osu.ppy.sh/b/738063 Reol - No title [Lust's Insane]]"
-	var taikoMap = "is eating [osu.ppy.sh/beatmapsets/1311915#mania/2719063 sum weird] +MEME Taiko>"
+	var taikoMap = "is eating [osu.ppy.sh/beatmapsets/1311915#mania/2719063 sum weird] +MEME <Taiko>"
+    var hardRockMap = "is playing [osu.ppy.sh/beatmapsets/261959#/606169 Haruna Luna - Kimiiro Signal-TV size ver.- [Xinely's Hard]] +HardRock"
 
-	//calcPerf(taikoMap, function (msg) { log(msg, 1) })
+	calcPerf(hardRockMap, function (msg) { log(msg, 1) })
 	//complain("AuracleTech", argsComplain, function (msg) { log(msg) })
 	//log("suck my tiny little squirrel")
 	//getRandomMaps(args, function (msg) { log(msg) }, 5)
