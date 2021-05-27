@@ -10,8 +10,6 @@ let cooldowng = new Set()
 let cooldown = new Set()
 let cdseconds = 10
 
-var lastCommandHistory = {} // TODO : NOW
-
 var files = fs.readdirSync('pollution')
 for (let file of files) if(file != '.keep') fs.unlinkSync('pollution/' + file)
 
@@ -44,10 +42,7 @@ client.connect().then(() => {
         log(`${todays} | ${message.user.ircUsername}: ${message.message}`, message.user.ircUsername == "AuracleTech" ? 1 : 0)
         if (message.self) return
 
-        if (message.message[0] != prefix) {
-            cooldowng.add(message.user.ircUsername)
-        	return calcPerf(message.message, function (msg) { message.user.sendMessage(msg) })
-        }
+        if (message.message[0] != prefix) return logCommand(commandfile, message)
 
         if (cooldowng.has(message.user.ircUsername)) return
         if (cooldown.has(message.user.ircUsername)) {
@@ -59,48 +54,53 @@ client.connect().then(() => {
         args.shift()
         let command = message.message.split(" ")
         let cmd = command[0].toLowerCase()
+        if((cmd == "!complain" || cmd == "!c") && commandHistory[message.user.ircUsername]) console.log(`Command History for ${message.user.ircUsername}`, commandHistory[message.user.ircUsername])
         let commandfile = client.commands.get(cmd.slice(prefix.length))
-        if(commandfile) {
-            cooldown.add(message.user.ircUsername)
-            return commandfile.run(message, args)
-        }
+        if(commandfile) return logCommand(commandfile, message, args)
     })
 })
+
+var commandHistory = {}
+
+function logCommand(commandfile = null, message, args = null){
+    cooldown.add(message.user.ircUsername)
+    if (commandfile) return commandfile.run(message, args, function (msg) { message.user.sendMessage(msg); return commandHistory[message.user.ircUsername] = [message.message, msg] })
+    else return calcPerf(message.message, function (msg) { message.user.sendMessage(msg); return commandHistory[message.user.ircUsername] = [message.message, msg] })
+}
 
 process.on('uncaughtException', function(err) { log('Caught exception: ' + err.stack, 3) });
 
 // AURACLE'S DEBUG MESS
 
 var PouchDB = require('pouchdb-node')
-const addMap = require('./functions/brain.js').addMap
-const mapRating = require('./functions/brain.js').mapRating
-const mapLength = require('./functions/brain.js').mapLength
-const getRandomMaps = require('./functions/brain.js').getRandomMaps
-const arrayInArray = require('./functions/brain.js').arrayInArray
-const setSettings = require('./functions/brain.js').setSettings
-const complain = require('./functions/brain.js').complain
-const calcPerf = require('./functions/brain.js').calcPerf
-const readline = require('readline').createInterface({ input: process.stdin, output: process.stdout });
 var db_maps = new PouchDB('DB_Maps')
 var db_settings = new PouchDB('DB_Settings')
+const addMap = require('./functions/brain.js').addMap
+const getRandomMaps = require('./functions/brain.js').getRandomMaps
+const setSettings = require('./functions/brain.js').setSettings
+const calcPerf = require('./functions/brain.js').calcPerf
+const readline = require('readline').createInterface({ input: process.stdin, output: process.stdout });
 
 readline.on('line', async (input) => {
-	var args = ["osu", "cake", "2*"]
-	var argsAddMap = ["osu", "tech", 1080535] 
-	var argsSetSettings = ["gamemode", "osu"]
-	var argsComplain = ["eat", "my", "shit", "fucking", "cunt", "you", "garbage", "of", "a", "human"]
-	var messageLink = "is listening to [osu.ppy.sh/beatmapsets/1002271#/2097898 Bliitzit - Team Magma & Aqua Leader Battle Theme (Unofficial)]"
-	var messageLink2 = "is editting [osu.ppy.sh/b/738063 Reol - No title [Lust's Insane]]"
-	var taikoMap = "is eating [osu.ppy.sh/beatmapsets/1311915#mania/2719063 sum weird] +MEME <Taiko>"
-    var hardRockMap = "is playing [osu.ppy.sh/beatmapsets/261959#/606169 Haruna Luna - Kimiiro Signal-TV size ver.- [Xinely's Hard]] +HardRock"
-
-	calcPerf(hardRockMap, function (msg) { log(msg, 1) })
-	//complain("AuracleTech", argsComplain, function (msg) { log(msg) })
-	//log("suck my tiny little squirrel")
-	//getRandomMaps(args, function (msg) { log(msg) }, 5)
-	//addMap(argsAddMap, function (msg) { log(msg) })
-	//setSettings("AuracleTech", argsSetSettings, function (msg) { log("setSettings", msg) })
-
-	//db_maps.info().then(async function (info) { log(info.doc_count) }) //Amount of maps in db_maps
-	//db_settings.info().then(async function (info) { log(info.doc_count) }) //Amount of user settings in db_settings
+	let args = input.toLowerCase().slice(prefix.length).split(/ +/);
+    args.shift()
+    let command = input.split(" ")[0].toLowerCase()
+    switch(command) {
+        case "np":
+            calcPerf(args.join(" "), function (msg) { log(msg, 1) })
+            break
+        case "r":
+            getRandomMaps(args, function (msg) { log(msg) }, 5)
+            break
+        case "a":
+            addMap(args, function (msg) { log(msg) })
+            break
+        case "s":
+            setSettings("AuracleTech", args, function (msg) { log(msg) })
+            break
+        case "infos":
+            db_maps.info().then(async function (info) { log(`${info.doc_count} maps in maps database`) })
+            db_settings.info().then(async function (info) { log(`${info.doc_count} options in the settings`) })
+            break
+    }
 });

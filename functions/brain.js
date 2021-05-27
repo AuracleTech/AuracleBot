@@ -27,6 +27,7 @@ async function getRandomMaps(args, callback, amount = 5){
 	var argMods = detectMods(args)
 	var argStarLevel = detectStarLevel(args)
 	var argStatus = detectStatus(args)
+	// TODO : Add length argument 0:30- 0:30+
 
 	let ids = [], map, displayText = "", docs = await db_maps.allDocs({ include_docs: true })
 	
