@@ -18,9 +18,7 @@ const download = (url, path, callback) => { re(url, (err, res, body) => { re(url
 
 module.exports.getRandomMaps = getRandomMaps
 async function getRandomMaps(args, callback, amount = 5){
-
 	// TODO : Estimate player star level he plays
-
 	var argGamemodes = detectGamemodes(args)
 	// TODO : Combined with a pp system
 	// TODO : If pp map and mod give map with the mod args
@@ -40,8 +38,8 @@ async function getRandomMaps(args, callback, amount = 5){
 	if (docs.length > 1) docs = docs.sort(() => Math.random() - Math.random()).slice(0, amount)
 	
 	for (let map of docs)
-		if (docs.length <= 1) displayText = `[https://osu.ppy.sh/b/${map.doc.id} ${map.doc.artist} - ${map.doc.title} [${map.doc.version}]] | ${Object.values(map.doc.labels).join(" ")} | ${mapRating(map.doc.rating)} ★ | ${mapLength(map.doc.length)} ♪ | BPM: ${map.doc.bpm}`
-		else displayText += `[https://osu.ppy.sh/b/${map.doc.id} ${mapRating(map.doc.rating)} ★] `
+		if (docs.length <= 1) displayText = `[https://osu.ppy.sh/b/${map.doc.id} ${map.doc.artist} - ${map.doc.title} [${map.doc.version}]] ${Object.values(map.doc.labels).join(" ")} | ${mapRating(map.doc.rating)} ★ | ${mapLength(map.doc.length)} ♪ | BPM: ${map.doc.bpm}`
+		else displayText += `[https://osu.ppy.sh/b/${map.doc.id} ${mapLength(map.doc.length)} ♪ ${mapRating(map.doc.rating)} ★] `
 	return callback(displayText)
 }
 

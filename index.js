@@ -90,7 +90,7 @@ readline.on('line', async (input) => {
             calcPerf(args.join(" "), function (msg) { log(msg, 1) })
             break
         case "r":
-            getRandomMaps(args, function (msg) { log(msg) }, 5)
+            getRandomMaps(args, function (msg) { log(msg) }, 1)
             break
         case "a":
             addMap(args, function (msg) { log(msg) })
