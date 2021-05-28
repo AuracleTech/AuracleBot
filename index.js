@@ -42,7 +42,7 @@ client.connect().then(() => {
         log(`${todays} | ${message.user.ircUsername}: ${message.message}`, message.user.ircUsername == "AuracleTech" ? 1 : 0)
         if (message.self) return
 
-        if (message.message[0] != prefix) return logCommand(commandfile, message)
+        if (message.message[0] != prefix) return logCommand(null, message)
 
         if (cooldowng.has(message.user.ircUsername)) return
         if (cooldown.has(message.user.ircUsername)) {

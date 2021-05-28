@@ -1,5 +1,5 @@
 const gamemodes = {
-    "osu": ["alternate", "tech", "classic", "jump", "reading", "stream", "elite", "experimental", "puzzle", "balanced", "marathon", "tag", "art", "pp", "relax"],
+    "osu": ["alternate", "tech", "classic", "jump", "stream", "flick", "cursordance", "experimental", "puzzle", "balanced", "marathon", "tag", "art", "pp", "relax", "spaced-stream", "deathstream", "hyper-deathstream", "ninja"],
     "ctb": ["jump", "stream", "marathon"],
     "taiko": ["futsu", "muzukashii", "oni", "marathon"],
     "mania": ["classic", "stream", "jacks", "ln", "sv", "tech", "marathon"],

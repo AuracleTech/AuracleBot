@@ -38,7 +38,7 @@ async function getRandomMaps(args, callback, amount = 5){
 	if (docs.length > 1) docs = docs.sort(() => Math.random() - Math.random()).slice(0, amount)
 	
 	for (let map of docs)
-		if (docs.length <= 1) displayText = `[https://osu.ppy.sh/b/${map.doc.id} ${map.doc.artist} - ${map.doc.title} [${map.doc.version}]] ${Object.values(map.doc.labels).join(" ")} | ${mapRating(map.doc.rating)} ★ | ${mapLength(map.doc.length)} ♪ | BPM: ${map.doc.bpm}`
+		if (docs.length <= 1) displayText = `[https://osu.ppy.sh/b/${map.doc.id} ${map.doc.artist} - ${map.doc.title} [${map.doc.version}]] ${Object.values(map.doc.labels).join(' ')} | ${mapRating(map.doc.rating)} ★ | ${mapLength(map.doc.length)} ♪ | BPM: ${map.doc.bpm}`
 		else displayText += `[https://osu.ppy.sh/b/${map.doc.id} ${mapLength(map.doc.length)} ♪ ${mapRating(map.doc.rating)} ★] `
 	return callback(displayText)
 }
@@ -69,9 +69,10 @@ async function addMap(args, callback){
 
 	let alreadyPresentBeatmaps = []
 
-	maps.rows.forEach(row => { if(row._id == `${row.beatmapSetId}#${row.id}`) alreadyPresentBeatmaps.push(row.doc.id) ;console.log("ID REE", row._id) })
+	for (let map of maps.rows) if(map._id == `${map.doc.beatmapSetId}#${map.doc.id}`) alreadyPresentBeatmaps.push(row.doc.id) // GET RID ON UPSERT UPDATE
 	beatmapsToAdd = beatmapsToAdd.filter(function(el) { return !alreadyPresentBeatmaps.includes(el.id) })
 
+	// TODO : If map BPM is >= 280 and as genre deathstream convert to hyper-deathstream
 	// TODO : Upsert map instead of insert
 	for (let beatmap of beatmapsToAdd) db_maps.post({ _id: `${beatmap.beatmapSetId}#${beatmap.id}`, beatmapSetId: beatmap.beatmapSetId, labels: argGamemodes, id: beatmap.id, artist: beatmap.artist, title: beatmap.title, rating: beatmap.difficulty.rating, bpm: beatmap.bpm, length: beatmap.length.total, version: beatmap.version, approvalStatus: beatmap.approvalStatus, hash: beatmap.hash })
 	return callback(`${beatmapsToAdd.length} maps upserted, total of ${Object.keys(argGamemodes).length} gamemode(s)`)
@@ -128,13 +129,15 @@ function mapRating(nombre){
 
 module.exports.detectID = detectID
 function detectID(args){
-	for (let arg of args) if(typeof(arg) === 'number' && parseInt(arg) >= 1 && parseInt(arg) <= 10000000) return arg
+	for (let arg of args) if(parseInt(arg) != null && parseInt(arg) >= 1 && parseInt(arg) <= 10000000) return arg
 }
 
 module.exports.detectGamemodes = detectGamemodes
 function detectGamemodes(args){
 	var list = {}
 	for (let arg of args) if (osu_gamemodes.isGamemode(arg)) list[arg] = []
+	// TODO : Get default gamemode from db_settings
+	if (Object.keys(list).length < 1) list = { "osu": [] } //TEMPFIX
 	for (let gamemode of Object.keys(list))
 	  for (let arg of args)
 	    if (osu_gamemodes.isGenre(arg, gamemode)) list[gamemode].push(arg)
@@ -180,7 +183,7 @@ async function CalculatePerformancePoint(resolve, filePath, accuracy, mods = [],
     var modsArgs = ''
     for (let mod of mods) modsArgs += ` -m ${osu_mods.getAbbreviation(mod)}`
     var accArg = (gamemode == 'mania') ? "" : ` -a ${accuracy}`
-    exec(`dotnet "./osu-tools-master/PerformanceCalculator/bin/Release/netcoreapp3.1/win10-x64/PerformanceCalculator.dll" simulate ${gamemode}${accArg} "${filePath}" -j${modsArgs.toLowerCase()}`, (error, stdout, stderr) => {
+    exec(`dotnet "./osu-tools-master/PerformanceCalculator/bin/Debug/netcoreapp3.1/PerformanceCalculator.dll" simulate ${gamemode}${accArg} "${filePath}" -j${modsArgs.toLowerCase()}`, (error, stdout, stderr) => {
         if (error) { log(error.message, 3); return 0 }
         if (stderr) { log(stderr, 3); return 0 }
         return resolve(JSON.parse(stdout), 0)
