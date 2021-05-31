@@ -8,7 +8,7 @@ client.commands = new Map()
 
 let cooldowng = new Set()
 let cooldown = new Set()
-let cdseconds = 10
+let cdseconds = 5
 
 var files = fs.readdirSync('pollution')
 for (let file of files) if(file != '.keep') fs.unlinkSync('pollution/' + file)
@@ -68,9 +68,7 @@ function logCommand(commandfile = null, message, args = null){
     else return calcPerf(message.message, function (msg) { message.user.sendMessage(msg); return commandHistory[message.user.ircUsername] = [message.message, msg] })
 }
 
-process.on('uncaughtException', function(err) { log('Caught exception: ' + err.stack, 3) });
-
-// AURACLE'S DEBUG MESS
+// Console Commands
 
 var PouchDB = require('pouchdb-node')
 var db_maps = new PouchDB('DB_Maps')
@@ -104,3 +102,5 @@ readline.on('line', async (input) => {
             break
     }
 });
+
+process.on('uncaughtException', function(err) { log('Caught exception: ' + err.stack, 3) });

@@ -38,8 +38,8 @@ async function getRandomMaps(args, callback, amount = 5){
 	if (docs.length > 1) docs = docs.sort(() => Math.random() - Math.random()).slice(0, amount)
 	
 	for (let map of docs)
-		if (docs.length <= 1) displayText = `[https://osu.ppy.sh/b/${map.doc.id} ${map.doc.artist} - ${map.doc.title} [${map.doc.version}]] ${Object.values(map.doc.labels).join(' ')} | ${mapRating(map.doc.rating)} ★ | ${mapLength(map.doc.length)} ♪ | BPM: ${map.doc.bpm}`
-		else displayText += `[https://osu.ppy.sh/b/${map.doc.id} ${mapLength(map.doc.length)} ♪ ${mapRating(map.doc.rating)} ★] `
+		if (docs.length <= 1) displayText = `[https://osu.ppy.sh/b/${map.doc.id} ${map.doc.artist} - ${map.doc.title} [${map.doc.version}]] ${Object.values(map.doc.labels).join(' ')} | ★ ${mapRating(map.doc.rating)} | ♪ ${mapLength(map.doc.length)} | BPM ${map.doc.bpm}`
+		else displayText += `[https://osu.ppy.sh/b/${map.doc.id} ${Object.values(map.doc.labels).join(' ')} | ♪ ${mapLength(map.doc.length)} | BPM ${map.doc.bpm} | ★ ${mapRating(map.doc.rating)}] `
 	return callback(displayText)
 }
 
@@ -54,28 +54,42 @@ async function addMap(args, callback){
 
 	var maps = await db_maps.allDocs({ include_docs: true })
 	
-	if(Object.keys(argGamemodes).length < 1) return callback("You need at least one gamemode. Valid gamemodes are : " + Object.keys(osu_gamemodes.gamemodes).join(' '))
-	if(!argID) return callback("You need to specify a map set ID")
+	if (Object.keys(argGamemodes).length < 1) return callback("You need at least one gamemode. Valid gamemodes are : " + Object.keys(osu_gamemodes.gamemodes).join(' '))
+	if (!argID) return callback("You need to specify a map set ID")
 
 	// TODO : Verify if there's minimum 1 genre
 
 	let beatmapsToAdd = []
 	for (let gamemode of Object.keys(argGamemodes)) {
 		var retrieveBeatmaps = await getBeatmaps(argID, null, gamemode)
-		if(retrieveBeatmaps.length < 1) return callback(`Invalid beatmap set ID : No maps found on this ID for the gamemode ${gamemode}`)
+		if (retrieveBeatmaps.length < 1) return callback(`Invalid beatmap set ID : No maps found on this ID for the gamemode ${gamemode}`)
 		else for (let beatmap of retrieveBeatmaps) beatmapsToAdd.push(beatmap)
 	}
 	if(beatmapsToAdd.length < 1) return
 
 	let alreadyPresentBeatmaps = []
 
-	for (let map of maps.rows) if(map._id == `${map.doc.beatmapSetId}#${map.doc.id}`) alreadyPresentBeatmaps.push(row.doc.id) // GET RID ON UPSERT UPDATE
-	beatmapsToAdd = beatmapsToAdd.filter(function(el) { return !alreadyPresentBeatmaps.includes(el.id) })
+	for (let map of maps.rows) if (map._id == `${map.doc.beatmapSetId}#${map.doc.id}`) alreadyPresentBeatmaps.push(row.doc.id) // GET RID ON UPSERT UPDATE
+	beatmapsToAdd = beatmapsToAdd.filter(function (el) { return !alreadyPresentBeatmaps.includes(el.id) })
 
+	// TOTHINK : Maybe create an automatic genre application, could be usefull in a lots of ways!
 	// TODO : If map BPM is >= 280 and as genre deathstream convert to hyper-deathstream
-	// TODO : Upsert map instead of insert
-	for (let beatmap of beatmapsToAdd) db_maps.post({ _id: `${beatmap.beatmapSetId}#${beatmap.id}`, beatmapSetId: beatmap.beatmapSetId, labels: argGamemodes, id: beatmap.id, artist: beatmap.artist, title: beatmap.title, rating: beatmap.difficulty.rating, bpm: beatmap.bpm, length: beatmap.length.total, version: beatmap.version, approvalStatus: beatmap.approvalStatus, hash: beatmap.hash })
-	return callback(`${beatmapsToAdd.length} maps upserted, total of ${Object.keys(argGamemodes).length} gamemode(s)`)
+	for (let beatmap of beatmapsToAdd)
+		db_maps.upsert(`${beatmap.beatmapSetId}#${beatmap.id}`, function (doc) {
+			doc.beatmapSetId = beatmap.beatmapSetId
+			doc.labels = argGamemodes
+			doc.id = beatmap.id
+			doc.artist = beatmap.artist
+			doc.title = beatmap.title
+			doc.rating = beatmap.difficulty.rating
+			doc.bpm = beatmap.bpm
+			doc.length = beatmap.length.total
+			doc.version = beatmap.version
+			doc.approvalStatus = beatmap.approvalStatus
+			doc.hash = beatmap.hash
+			return doc
+		})
+	return callback(`${beatmapsToAdd.length} maps upserted, total of ${Object.keys(argGamemodes).length} gamemode(s) and the following genres : ${Object.values(argGamemodes).join(' ')}`)
 }
 
 module.exports.setSettings = setSettings

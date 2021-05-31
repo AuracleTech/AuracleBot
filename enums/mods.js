@@ -42,23 +42,21 @@ const groups = {
 
 function getBinary(mod){
     for (const [key, values] of Object.entries(binaries))
-        for (let arg of values) if (arg.toLowerCase() == mod.toLowerCase()) return key
+        for (let arg of values) if (arg.trim().toLowerCase() == mod.trim().toLowerCase()) return key
     return
 }
 
 function getFullname(mod){
-    // TODO : Optimize this a tiny bit
     for (const [key, values] of Object.entries(binaries))
          for (let arg of values)
-           if (key == mod || arg.toLowerCase().includes(mod.toLowerCase())) return values[0]
+           if (key == mod || arg.trim().toLowerCase().includes(mod.trim().toLowerCase())) return values[0]
     return
 }
 
 function getAbbreviation(mod){
-    // TODO : Optimize this a tiny bit
     for (const [key, values] of Object.entries(binaries))
         for (let arg of values)
-            if (key == mod || arg.toLowerCase().includes(mod.toLowerCase())) return values[1]
+            if (key == mod || arg.trim().toLowerCase().includes(mod.trim().toLowerCase())) return values[1]
     return
 }
 
