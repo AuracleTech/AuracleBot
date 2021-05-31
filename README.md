@@ -40,7 +40,7 @@ Available arguments for !recommend
 ## Gamemode & Genres
 
 List of beatmap gamemodes and genres per gamemode 
- - **osu** : alternate, tech, classic, jump, reading, stream, elite, experimental, puzzle, balanced, marathon, tag, art, pp, relax
+ - **osu** :  alternate, tech, classic, jump, stream, flick, cursordance, experimental, puzzle, balanced, marathon, tag, art, pp, relax, spaced-stream, deathstream, hyper-deathstream, ninja, complex, burst
  - **ctb** : jump, stream, marathon
  - **taiko** : futsu, muzukashii, oni, marathon
  - **mania** : classic, stream, jacks, ln, sv, tech, marathon 
