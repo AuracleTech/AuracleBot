@@ -223,6 +223,7 @@ async function calcPerf(command, callback){
         var beatmap = await getBeatmaps(null, beatmapID, gamemode, activeMods)
         if(beatmap.length < 1) return callback(`Invalid beatmap ID : No maps avalaible on this ID for the gamemode`)
         gamemode = (beatmap[0].mode.toLowerCase() != 'standard') ? beatmap[0].mode.toLowerCase() : 'osu'
+    console.log("activeMods", activeMods) // GIVES ME SOME WEIRD SHIT, TOFIX
 
         download(`https://osu.ppy.sh/osu/${beatmapID}`, filePath, () => {
             var acc100 = new Promise((resolve, reject) => { CalculatePerformancePoint(resolve, filePath, 100, activeMods, gamemode) })

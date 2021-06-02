@@ -39,10 +39,11 @@ client.connect().then(() => {
         var hours = today.getHours()
         var mins = today.getMinutes().toString().padStart(2, '0')
         var todays = mm + '/' + dd + '/' + yyyy + ' ' + hours + ":" + mins
+        // TODO : log action if it's an action, log message content if not
         log(`${todays} | ${message.user.ircUsername}: ${message.message}`, message.user.ircUsername == "AuracleTech" ? 1 : 0)
         if (message.self) return
 
-        if (message.message[0] != prefix) return logCommand(null, message)
+        if (message.getAction()) return logCommand(null, message)
 
         if (cooldowng.has(message.user.ircUsername)) return
         if (cooldown.has(message.user.ircUsername)) {
@@ -63,9 +64,10 @@ client.connect().then(() => {
 var commandHistory = {}
 
 function logCommand(commandfile = null, message, args = null){
+    // TODO : Make sure the cooldown add is only called id /np is detected not when a regular message is sent...
     cooldown.add(message.user.ircUsername)
     if (commandfile) return commandfile.run(message, args, function (msg) { message.user.sendMessage(msg); return commandHistory[message.user.ircUsername] = [message.message, msg] })
-    else return calcPerf(message.message, function (msg) { message.user.sendMessage(msg); return commandHistory[message.user.ircUsername] = [message.message, msg] })
+    else return calcPerf(message.getAction(), function (msg) { message.user.sendMessage(msg); return commandHistory[message.user.ircUsername] = [message.getAction(), msg] })
 }
 
 // Console Commands

@@ -1,5 +1,5 @@
 const binaries = {
-    0:           ["None", ""],
+    0:           ["None", "NM"],
     1:           ["NoFail", "NF"],
     2:           ["Easy", "EZ"],
     4:           ["TouchDevice", "TD"],
