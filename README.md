@@ -49,26 +49,26 @@ List of beatmap gamemodes and genres per gamemode
 
 ## Genres definitions
 
-Alternate : Mode that forces you to play with multiple keys
-Tech : Unexpected Rhythms
-Classic : Popular and/or old maps
-Jump : Forces you to jump (Large distance between circles)
-Burst : Contains a serie of 3 or more notes in rapid successions 
-Stream : Contains a burst of more than 5 notes multiple times
-Spaced-Stream : Contains a burst with spaced notes of more than 5 notes multiple times
-Deathstream : A stream that last longer than 15 notes
-Hyper-Deathstream : A deathstream at 250BPM or more
-Ninja : Maps that requires great precision (Often small circle size)
-Complex : Maps with all modes mixed in making it complex
-Flick : Forces you to jump very quickly
-Cursordance : Maps you can do while cursor dancing
-Experimental : Unusual maps
-Puzzle : Complex patterns
-Balanced : Maps that doesn't have a difficulty spike
-Marathon : Very long maps
-Art : Maps meant for art (Memes, nice visuals, beautiful patterns)
-Relax : Maps nice to play with Relax
-Tag : Maps meant to play in TAG mode in multiplayer
+- Alternate : Mode that forces you to play with multiple keys
+- Tech : Unexpected Rhythms
+- Classic : Popular and/or old maps
+- Jump : Forces you to jump (Large distance between circles)
+- Burst : Contains a serie of 3 or more notes in rapid successions 
+- Stream : Contains a burst of more than 5 notes multiple times
+- Spaced-Stream : Contains a burst with spaced notes of more than 5 notes multiple times
+- Deathstream : A stream that last longer than 15 notes
+- Hyper-Deathstream : A deathstream at 250BPM or more
+- Ninja : Maps that requires great precision (Often small circle size)
+- Complex : Maps with all modes mixed in making it complex
+- Flick : Forces you to jump very quickly
+- Cursordance : Maps you can do while cursor dancing
+- Experimental : Unusual maps
+- Puzzle : Complex patterns
+- Balanced : Maps that doesn't have a difficulty spike
+- Marathon : Very long maps
+- Art : Maps meant for art (Memes, nice visuals, beautiful patterns)
+- Relax : Maps nice to play with Relax
+- Tag : Maps meant to play in TAG mode in multiplayer
 
 ## Map Status
 
