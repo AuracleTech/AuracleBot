@@ -13,6 +13,8 @@ All commands can be sent using only with the first letter (!r for !recommend)
 
 **!bomb** : Same as !recommended, but returns up to 5 beatmaps at once!
 
+> **NOTE** : For now all other gamemodes's database is empty
+
 **!settings** : Set your default favorite gamemode
  - !s gamemode mania
  - Example usage !s gamemode osu
@@ -20,7 +22,7 @@ All commands can be sent using only with the first letter (!r for !recommend)
 **!complain** : Any recommendations? Complains? Bugs? Just use !complain it directly prints it on my computer and gives me existential crisis
  - !c I really love you... But I just did recommend and I received 5 bitcoins in my wallet like wat, fix that please
 
-**/np** : Returns advanced information about the beatmap you sent (Any gamemode)
+**/np** : Returns advanced information about the beatmap you currently have selected (Any gamemode)
 **!help** : Brings you here
 **!ping** : Is bancho dead? Am I dead? Is the universe expending? Ping answers all that
 
@@ -40,10 +42,33 @@ Available arguments for !recommend
 ## Gamemode & Genres
 
 List of beatmap gamemodes and genres per gamemode 
- - **osu** :  alternate, tech, classic, jump, stream, flick, cursordance, experimental, puzzle, balanced, marathon, tag, art, pp, relax, spaced-stream, deathstream, hyper-deathstream, ninja, complex, burst
+ - **osu** :  alternate, tech, classic, jump, stream, flick, cursordance, experimental, puzzle, balanced, marathon, tag, art, relax, spaced-stream, deathstream, hyper-deathstream, ninja, complex, burst
  - **ctb** : jump, stream, marathon
  - **taiko** : futsu, muzukashii, oni, marathon
  - **mania** : classic, stream, jacks, ln, sv, tech, marathon 
+
+## Genres definitions
+
+Alternate : Mode that forces you to play with multiple keys
+Tech : Unexpected Rhythms
+Classic : Popular and/or old maps
+Jump : Forces you to jump (Large distance between circles)
+Burst : Contains a serie of 3 or more notes in rapid successions 
+Stream : Contains a burst of more than 5 notes multiple times
+Spaced-Stream : Contains a burst with spaced notes of more than 5 notes multiple times
+Deathstream : A stream that last longer than 15 notes
+Hyper-Deathstream : A deathstream at 250BPM or more
+Ninja : Maps that requires great precision (Often small circle size)
+Complex : Maps with all modes mixed in making it complex
+Flick : Forces you to jump very quickly
+Cursordance : Maps you can do while cursor dancing
+Experimental : Unusual maps
+Puzzle : Complex patterns
+Balanced : Maps that doesn't have a difficulty spike
+Marathon : Very long maps
+Art : Maps meant for art (Memes, nice visuals, beautiful patterns)
+Relax : Maps nice to play with Relax
+Tag : Maps meant to play in TAG mode in multiplayer
 
 ## Map Status
 
