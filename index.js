@@ -8,7 +8,7 @@ client.commands = new Map()
 
 let cooldowng = new Set()
 let cooldown = new Set()
-let cdseconds = 5
+let cdseconds = 3
 
 var files = fs.readdirSync('pollution')
 for (let file of files) if(file != '.keep') fs.unlinkSync('pollution/' + file)
@@ -28,6 +28,7 @@ fs.readdir("./commands/", (err, files) => {
 client.connect().then(() => {
     log("Logged in");
     client.on("PM", (message) => {
+        // TODO : Fix all that messy code, DISGUSTING
         setTimeout(() => {
             cooldown.delete(message.user.ircUsername)
             cooldowng.delete(message.user.ircUsername)
@@ -44,13 +45,12 @@ client.connect().then(() => {
         if (message.self) return
 
         if (message.getAction()) return logCommand(null, message)
-
+        if (message.message[0] != prefix) return
         if (cooldowng.has(message.user.ircUsername)) return
         if (cooldown.has(message.user.ircUsername)) {
             cooldowng.add(message.user.ircUsername)
-            return message.user.sendMessage(`Please wait ${cdseconds} seconds before sending another command.`)
+            return message.user.sendMessage(`Wait at least ${cdseconds} seconds between each commands`)
         }
-
         let args = message.message.toLowerCase().slice(prefix.length).split(/ +/);
         args.shift()
         let command = message.message.split(" ")
