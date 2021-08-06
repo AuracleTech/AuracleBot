@@ -197,7 +197,7 @@ async function CalculatePerformancePoint(resolve, filePath, accuracy, mods = [],
     var modsArgs = ''
     for (let mod of mods) modsArgs += ` -m ${osu_mods.getAbbreviation(mod)}`
     var accArg = (gamemode == 'mania') ? "" : ` -a ${accuracy}`
-    exec(`dotnet "./osu-tools-master/PerformanceCalculator/bin/Debug/netcoreapp3.1/PerformanceCalculator.dll" simulate ${gamemode}${accArg} "${filePath}" -j${modsArgs.toLowerCase()}`, (error, stdout, stderr) => {
+    exec(`dotnet "./osu-tools-master/PerformanceCalculator/bin/Release/net5.0/PerformanceCalculator.dll" simulate ${gamemode}${accArg} "${filePath}" -j${modsArgs.toLowerCase()}`, (error, stdout, stderr) => {
         if (error) { log(error.message, 3); return 0 }
         if (stderr) { log(stderr, 3); return 0 }
         return resolve(JSON.parse(stdout), 0)

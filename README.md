@@ -66,7 +66,7 @@ List of beatmap gamemodes and genres per gamemode
 - Puzzle : Complex patterns
 - Balanced : Maps that doesn't have a difficulty spike
 - Marathon : Very long maps
-- Art : Maps meant for art (Memes, nice visuals, beautiful patterns)
+- Art : Maps meant for art (Aspire maps, Memes, cool visuals, beautiful patterns)
 - Relax : Maps nice to play with Relax
 - Tag : Maps meant to play in TAG mode in multiplayer
 
