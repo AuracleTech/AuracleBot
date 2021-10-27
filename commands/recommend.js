@@ -1,5 +1,5 @@
-const getRandomMaps = require('../functions/brain.js').getRandomMaps
-
-module.exports.run = async (message, args, callback) => { getRandomMaps(args, function (msg) { callback(msg) }, 1) }
-
-module.exports.help = { name: "r", alias: 'recommend' }
+// TODO : Command
+module.exports.help = { name: 'recommend', alias: 'r' }
+module.exports.run = async (message, args, callback) => {
+	//getRandomMaps(restrictions, function (msg) { callback(msg) }, amount)
+}

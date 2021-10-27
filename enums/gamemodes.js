@@ -1,11 +1,11 @@
 const gamemodes = {
-    "osu": ["alternate", "tech", "classic", "jump", "stream", "flick", "cursordance", "experimental", "puzzle", "balanced", "marathon", "tag", "art", "pp", "relax", "spaced-stream", "deathstream", "hyper-deathstream", "ninja", "complex", "burst"],
-    "ctb": ["jump", "stream", "marathon"],
-    "taiko": ["futsu", "muzukashii", "oni", "marathon"],
-    "mania": ["classic", "stream", "jacks", "ln", "sv", "tech", "marathon"],
+    'osu': ['alternate', 'tech', 'classic', 'jump', 'stream', 'flick', 'cursordance', 'experimental', 'puzzle', 'balanced', 'marathon', 'tag', 'art', 'pp', 'relax', 'spaced-stream', 'deathstream', 'hyper-deathstream', 'ninja', 'complex', 'burst'],
+    'ctb': ['jump', 'stream', 'marathon'],
+    'taiko': ['futsu', 'muzukashii', 'oni', 'marathon'],
+    'mania': ['classic', 'stream', 'jacks', 'ln', 'sv', 'tech', 'marathon'],
 }
 
-const binaries = { "osu": 0, "taiko": 1, "ctb": 2, "mania": 3 }
+const binaries = { 'osu': 0, 'taiko': 1, 'ctb': 2, 'mania': 3 }
 
 function getBinary(gamemode){
     for (const [key, values] of Object.entries(binaries)) if (key == gamemode) return binaries[key]
@@ -18,8 +18,7 @@ function isGenre(genre, gamemode){
 }
 
 function isGamemode(gamemode){
-    if (gamemodes.hasOwnProperty(gamemode.toLowerCase())) return true
-    else return false
+    return (gamemodes.hasOwnProperty(gamemode.toLowerCase()))
 }
 
 exports.gamemodes = gamemodes
