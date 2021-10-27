@@ -20,7 +20,6 @@ function getFormattedDate () {
 }
 
 // Returns a time format from seconds mm:ss
-// TODO : Add a checkup for hours and more in case a map is unresonnably long
 function formatTimeFromSecs(secs){
     let hh = Math.floor(secs / 60 / 60)
     let mm = Math.floor(secs / 60) - (hh * 60)

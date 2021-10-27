@@ -66,7 +66,6 @@ function findIDsFromLink (args) {
 	return found
 }
 
-// TODO : Change standard depending on the user's default settings
 // Detect gamemodes and mods from the NP sentence
 function findGamemodesFromNP (args) {
 	args = args.join(' ').split('+').join('-').split('-')
@@ -80,7 +79,6 @@ function findGamemodesFromNP (args) {
 		else if (enum_gamemodes.isGamemode(arg.replace('<', '').replace('>', ''))) found.gamemode = arg
 	return found
 }
-
 
 // Check if arg could be a map ID
 function isBeatmapID (arg, gamemode = null) {

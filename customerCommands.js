@@ -20,7 +20,6 @@ function customerCommand (message, client) {
     setTimeout(() => { cooldown.delete(username) }, 1e3 * cooldownDelay)
     if (cooldown.has(message.user.ircUsername)) return message.user.sendMessage(`Wait at least ${cooldownDelay} seconds between each commands`)
 
-    // TODO : More advanced logging system using text files
     log(`${message.user.ircUsername} used CMD :\n${message.message}`)
 
     if (message.getAction()) return doAction(message)
@@ -29,12 +28,11 @@ function customerCommand (message, client) {
 }
 
 function doAction () {
-    // TODO : Detect if action is something other than /NP
     client.commands.get('np').run(message, message.getAction().split(' '), (function (msg) { message.user.sendMessage(msg) })) // TOFIX : Better way of splitting
 }
 
 function doCommand (message, client) {
-    let args = message.message.slice(prefix.length).split(' ') // CAN NOW CONTAIN HIGHERCASES CHARACTERS /!\
+    let args = message.message.slice(prefix.length).split(' ')
     let command = args[0].toLowerCase()
     args.shift()
     if (client.commands.get(command)) return client.commands.get(command).run(message, args, (function (msg) { message.user.sendMessage(msg) }))
