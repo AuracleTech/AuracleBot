@@ -6,7 +6,7 @@ const { exec } = require('child_process')
 const log = require('./utils.js').log
 const execFile = require('child_process').execFile
 
-async function calculatePerformance (mapID, gamemode, mods = []) {
+module.exports.calculatePerformance = async (mapID, gamemode, mods = []) => {
 	let filename = new Date().getTime()
 	let accs = [100, 99, 98, 97, 95]
 	if (gamemode == 'mania') accs = [100]
@@ -30,5 +30,3 @@ async function launchPerformanceCalculator (filename, acc, gamemode, mods = []) 
 	    })
 	})
 }
-
-module.exports.calculatePerformance = calculatePerformance

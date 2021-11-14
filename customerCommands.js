@@ -2,7 +2,7 @@
 const getTopScores = require('./scoresManager.js').getTopScores
 const log = require('./utils.js').log
 
-// Vars
+// Variables
 var cooldown = new Set()
 var cooldownDelay = 3
 var commandHistory = {}

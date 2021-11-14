@@ -1,38 +1,37 @@
 /**
-*                              AAAAAAAAAAAAA
-*                        AAAAAAAAAAAAAAAAAAAAAAAAA
-*                    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-*                  AAAAAAAAAAA               AAAAAAAAAAA
-*                AAAAAAAAA                       AAAAAAAAA
-*              AAAAAAAA                             AAAAAAAA
-*            AAAAAAAA                                 AAAAAAAA
-*           AAAAAAA                 AAA                 AAAAAAA
-*          AAAAAAA                 AAAAA                 AAAAAAA
-*          AAAAAA                 AAAAAAA                 AAAAAA
-*         AAAAAA                 AAAAAAAAA                 AAAAAA
-*        AAAAAAA                AAAAAAAAAAA                AAAAAAA
-*        AAAAAAA               AAAAAA AAAAAA               AAAAAAA
-*        AAAAAA               AAAAAA    AAAAA               AAAAAA
-*        AAAAAA              AAAAAA     AAAAAA              AAAAAA
-*        AAAAAAA*            AAAAAA       AAAAAA            AAAAAAA
-*        AAAAAAA           AAAAAAA        AAAAAA           AAAAAAA
-*         AAAAAA          AAAAAAAAAAAA     AAAAAA          AAAAAA
-*          AAAAAA        AAAAAAAAAAA         AAAAA        AAAAAA
-*          AAAAAAA                                       AAAAAAA
-*           AAAAAAA                                     AAAAAAA
-*            AAAAAAAA                                 AAAAAAAA
-*              AAAAAAAA                             AAAAAAAA
-*                AAAAAAAAA                       AAAAAAAAA
-*                  AAAAAAAAAAA               AAAAAAAAAAA
-*                    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-*                        AAAAAAAAAAAAAAAAAAAAAAAAA
-*                              AAAAAAAAAAAAA
+*                           AAAAAAAAAAAAAAAAAA
+*                     AAAAAAAAA            AAAAAAAAA
+*                 AAAAAA                          AAAAAA
+*              AAAA                                    AAAA
+*           AAAA                                          AAAA
+*         AAAA                                              AAAA
+*       AAAA                                                  AAAA
+*      AAA                                                      AAA
+*     AAA                                                        AAA
+*    AAA                                                          AAA
+*   AAA                          AAAAAAAA                          AAA
+*  AAA                         AAAAA  AAAAA                         AAA
+*  AAA                       AAAAA      AAAAA                       AAA
+*  AAA                      AAAA          AAAA                      AAA
+*  AAA                    AAAA      AA      AAAA                    AAA
+*  AAA                  AAAA       AAAA       AAAA                  AAA
+*  AAA                 AAAA                    AAAA                 AAA
+*   AAA                                                            AAA
+*    AAA                                                          AAA
+*     AAA                                                        AAA
+*      AAA                                                      AAA
+*       AAAA                                                  AAAA
+*         AAAA                                              AAAA
+*           AAAA                                          AAAA
+*              AAAA                                    AAAA
+*                AAAAAA                            AAAAAA
+*                     AAAAAAAAA            AAAAAAAAA
+*                           AAAAAAAAAAAAAAAAAA
 *
+*                              Auracle Bot
+*                              2021.10.18
 *
-*                               Auracle Bot
-*                               2021.10.18
-*
-*                                  TODO
+*                                 TODO
 *
 * Create Temp folder on startup if missing
 * Deletes .osu files after calculating performances

@@ -26,6 +26,11 @@ async function getBeatmaps (beatmapSetId = null, beatmapId = null, gamemode = nu
 	return api_osu.getBeatmaps(request)
 }
 
+/**
+* Download a beatmaps using ID
+* @param {Number} ID : the ID of the map
+* @param {String} filename : desired filename
+*/
 async function downloadBeatmap (ID, filename) {
 	const url = `https://osu.ppy.sh/osu/${ID}`
 	const writer = fs.createWriteStream(`./Temp/${filename}.osu`)
