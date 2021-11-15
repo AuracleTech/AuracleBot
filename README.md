@@ -1,7 +1,8 @@
-# AuracleTech-Osu
+# AuracleBot
 
-Hey, I'm Auracle, a noob that learned how to code using his feet. And this is my osu IRC bot to give you maps you actually want sorting them by pp, genre, gamemode, mods and more!
-~~Strikethrough~~ text is what's gonna be available next, Incredible!
+Hey, I'm Auracle, and this is my osu IRC bot to give you maps you actually want.
+Sorting them by pp, genre, gamemode, mods, style and more!
+~~Strikethrough~~ text is what's gonna be available in future updates!
 
 ## Commands
 All commands can be sent using only with the first letter (!r for !recommend)
