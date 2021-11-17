@@ -45,6 +45,7 @@
 * customerCommands.doAction Detect if another command than NP was used
 * customerCommands.customerCommand Advanced logging system using text files
 * argsFinder.findGamemodesFromNP Change standard depending on the user's default settings
+* customerCommands.doAction Better way of splitting into arguments
 *
 *                                 TOTEST
 * Cooldown delay on command only
