@@ -1,7 +1,4 @@
-mysql.js
 .env
 node_modules
-DB_Maps
-DB_Settings
 osu-tools-master
 *.osu
