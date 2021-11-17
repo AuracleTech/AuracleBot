@@ -10,15 +10,16 @@ var prefix = '!'
 
 // Read Commands
 function customerCommand (message, client) {
+
     if (message.self) return
 
     getTopScores(message.user.ircUsername)
+    
+    if(!message.getAction() && message.message[0] != prefix) return
 
-    if (message.message[0] != prefix || !message.getAction()) return
-
-    cooldown.add(message.user.ircUsername)
-    setTimeout(() => { cooldown.delete(username) }, 1e3 * cooldownDelay)
     if (cooldown.has(message.user.ircUsername)) return message.user.sendMessage(`Wait at least ${cooldownDelay} seconds between each commands`)
+    setTimeout(() => { cooldown.delete(message.user.ircUsername) }, 1e3 * cooldownDelay)
+    cooldown.add(message.user.ircUsername)
 
     log(`${message.user.ircUsername} used CMD :\n${message.message}`)
 
