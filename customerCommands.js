@@ -10,7 +10,6 @@ var prefix = '!'
 
 // Read Commands
 exports.customerCommand = (instance, client) =>{
-
     if (instance.self) return
 
     getTopScores(instance.user.ircUsername)

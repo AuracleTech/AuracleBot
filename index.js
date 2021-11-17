@@ -47,8 +47,7 @@
 * customerCommands.doAction Better way of splitting into arguments
 *
 *                                 TOTEST
-* Cooldown delay on command only
-* utils.formatTimeFromSecs Verify that hh-mm-ss are displayed properly, mm-ss already tested
+*
 */
 
 // Debug Mode - Disable the IRC & Enable Quick Consonle Command function
@@ -93,7 +92,7 @@ if (!debugMode)
     })
 
 // Command Consoles
-readline.on('line', async (input) => consoleCommand(input, client, debugMode))
+readline.on('line', async (input) => consoleCommand(input, client))
 
 // Catch Exceptions
 process.on('uncaughtException', function(err) { log(`Caught exception: ${err.stack}`, 3) })
