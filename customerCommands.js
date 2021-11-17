@@ -14,14 +14,14 @@ function customerCommand (message, client) {
     if (message.self) return
 
     getTopScores(message.user.ircUsername)
-    
+
     if(!message.getAction() && message.message[0] != prefix) return
 
     if (cooldown.has(message.user.ircUsername)) return message.user.sendMessage(`Wait at least ${cooldownDelay} seconds between each commands`)
     setTimeout(() => { cooldown.delete(message.user.ircUsername) }, 1e3 * cooldownDelay)
     cooldown.add(message.user.ircUsername)
 
-    log(`${message.user.ircUsername} used CMD :\n${message.message}`)
+    log(`${message.user.ircUsername} used ${message.getAction() ? 'ACTION' : 'CMD'} : ${message.message}`)
 
     if (message.getAction()) return doAction(message)
     if (message.message[0] == prefix) return doCommand(message, client)
