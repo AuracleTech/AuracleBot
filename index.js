@@ -85,12 +85,11 @@ fs.readdir('./Commands/', (err, files) => {
 if (!fs.existsSync(tempFolder)) fs.mkdirSync(tempFolder)
 for (let file of fs.readdirSync(tempFolder)) fs.unlinkSync(`${tempFolder}${file}`)
 
-
 // Register Bancho Events
 if (!debugMode)
     client.connect().then(() => {
         log('Logged in')
-        client.on('PM', async (message) => customerCommand(message, client))
+        client.on('PM', async (instance) => customerCommand(instance, client))
     })
 
 // Command Consoles

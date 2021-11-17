@@ -8,7 +8,7 @@ const findGamemodesFromNP = require('../argsFinder.js').findGamemodesFromNP
 const getBeatmaps = require('../beatmapsManager.js').getBeatmaps
 
 module.exports.help = { name: 'np', alias: 'n' }
-module.exports.run = async (message, args, callback) => {
+module.exports.run = async (instance, args, callback) => {
 	let IDs = findIDsFromLink(args)
 	if (IDs.beatmapID == -1) return callback(`Impossible to find any beatmap ID`)
 	let search = findGamemodesFromNP(args)

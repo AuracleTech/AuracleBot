@@ -1,2 +1,2 @@
 module.exports.help = { name: 'complain', alias: 'c' }
-module.exports.run = async (message, args, callback) => { callback('NOT IMPLEMENTED!') }
+module.exports.run = async (instance, args, callback) => { callback('NOT IMPLEMENTED FOR VERSION 2!') }

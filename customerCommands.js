@@ -9,35 +9,40 @@ var commandHistory = {}
 var prefix = '!'
 
 // Read Commands
-function customerCommand (message, client) {
+function customerCommand (instance, client) {
 
-    if (message.self) return
+    if (instance.self) return
 
-    getTopScores(message.user.ircUsername)
+    getTopScores(instance.user.ircUsername)
 
-    if(!message.getAction() && message.message[0] != prefix) return
+    if(!instance.getAction() && instance.message[0] != prefix) return
 
-    if (cooldown.has(message.user.ircUsername)) return message.user.sendMessage(`Wait at least ${cooldownDelay} seconds between each commands`)
-    setTimeout(() => { cooldown.delete(message.user.ircUsername) }, 1e3 * cooldownDelay)
-    cooldown.add(message.user.ircUsername)
+    if (cooldown.has(instance.user.ircUsername)) return instance.user.sendMessage(`Wait at least ${cooldownDelay} seconds between each commands`)
+    setTimeout(() => { cooldown.delete(instance.user.ircUsername) }, 1e3 * cooldownDelay)
+    cooldown.add(instance.user.ircUsername)
 
-    log(`${message.user.ircUsername} used ${message.getAction() ? 'ACTION' : 'CMD'} : ${message.message}`)
+    log(`${instance.user.ircUsername} used ${instance.getAction() ? 'ACTION' : 'CMD'} : ${instance.message}`)
 
-    if (message.getAction()) return doAction(client, message)
-    if (message.message[0] == prefix) return doCommand(message, client)
-    return log(`eventsManager.customerCommand() ${message}`, 2)
+    if (instance.getAction()) return doAction(client, instance)
+    if (instance.message[0] == prefix) return doCommand(instance, client)
+    return log(`eventsManager.customerCommand() ${instance.message}`, 2)
 }
 
-function doAction (client, message) {
-    client.commands.get('np').run(message, message.getAction().split(' '), (function (msg) { message.user.sendMessage(msg) }))
+function doAction (client, instance) {
+    client.commands.get('np').run(instance, instance.getAction().split(' '), (function (message) { reply(instance, message) }))
 }
 
-function doCommand (message, client) {
-    let args = message.message.slice(prefix.length).split(' ')
+function reply (instance, message) {
+    log(`${process.env.IRC_USERNAME} replied : ${message}`)
+    instance.user.sendMessage(message)
+}
+
+function doCommand (instance, client) {
+    let args = instance.message.slice(prefix.length).split(' ')
     let command = args[0].toLowerCase()
     args.shift()
-    if (client.commands.get(command)) return client.commands.get(command).run(message, args, (function (msg) { message.user.sendMessage(msg) }))
-    else return message.user.sendMessage(`Command ${command} is nonexistent`)
+    if (client.commands.get(command)) return client.commands.get(command).run(instance, args, (function (message) { reply(instance, message) }))
+    else return instance.user.sendMessage(`Command ${command} is nonexistent`)
 }
 
 exports.customerCommand = customerCommand
