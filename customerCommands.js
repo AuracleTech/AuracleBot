@@ -23,13 +23,13 @@ function customerCommand (message, client) {
 
     log(`${message.user.ircUsername} used ${message.getAction() ? 'ACTION' : 'CMD'} : ${message.message}`)
 
-    if (message.getAction()) return doAction(message)
+    if (message.getAction()) return doAction(client, message)
     if (message.message[0] == prefix) return doCommand(message, client)
     return log(`eventsManager.customerCommand() ${message}`, 2)
 }
 
-function doAction () {
-    client.commands.get('np').run(message, message.getAction().split(' '), (function (msg) { message.user.sendMessage(msg) })) // TOFIX : Better way of splitting
+function doAction (client, message) {
+    client.commands.get('np').run(message, message.getAction().split(' '), (function (msg) { message.user.sendMessage(msg) }))
 }
 
 function doCommand (message, client) {
