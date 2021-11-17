@@ -1,6 +1,6 @@
 {
-  "name": "AuracleTech-Osu",
-  "version": "0.0.1",
+  "name": "AuracleBot",
+  "version": "2.0.0",
   "description": "An IRC bot made for osu!",
   "main": "index.js",
   "scripts": {

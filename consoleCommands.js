@@ -3,7 +3,7 @@
 const log = require('./utils.js').log
 
 // Read Commands
-async function consoleCommand(input, client, debugMode) {
+exports.consoleCommand = async (input, client, debugMode) => {
     let instance = {}
     instance.user = []
     instance.user.ircUsername = process.env.IRC_USERNAME
@@ -26,5 +26,3 @@ async function laboratory (input, client, command, instance, args) {
         else log('Command unavailable.', 4)
     })
 }
-
-exports.consoleCommand = consoleCommand

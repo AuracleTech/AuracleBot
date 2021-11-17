@@ -9,7 +9,7 @@ var commandHistory = {}
 var prefix = '!'
 
 // Read Commands
-function customerCommand (instance, client) {
+exports.customerCommand = (instance, client) =>{
 
     if (instance.self) return
 
@@ -44,5 +44,3 @@ function doCommand (instance, client) {
     if (client.commands.get(command)) return client.commands.get(command).run(instance, args, (function (message) { reply(instance, message) }))
     else return instance.user.sendMessage(`Command ${command} is nonexistent`)
 }
-
-exports.customerCommand = customerCommand

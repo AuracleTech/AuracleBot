@@ -15,7 +15,7 @@ const fs = require('fs')
 * @param {Number} gamemode : gamemode desired (binary)
 * @param {Array} mods : mods desired (array of binaries)
 */
-async function getBeatmaps (beatmapSetId = null, beatmapId = null, gamemode = null, mods = 0) {
+module.exports.getBeatmaps = async (beatmapSetId = null, beatmapId = null, gamemode = null, mods = 0) => {
 	let request = { mods: mods }
 	if (gamemode) request.m = enum_gamemodes.getBinary(gamemode)
 	if (beatmapSetId)
@@ -30,7 +30,7 @@ async function getBeatmaps (beatmapSetId = null, beatmapId = null, gamemode = nu
 * @param {Number} ID : the ID of the map
 * @param {String} filename : desired filename
 */
-async function downloadBeatmap (ID, filename) {
+module.exports.downloadBeatmap = async (ID, filename) => {
 	const url = `https://osu.ppy.sh/osu/${ID}`
 	const writer = fs.createWriteStream(`${tempFolder}${filename}.osu`)
 	const response = await axios({
@@ -44,6 +44,3 @@ async function downloadBeatmap (ID, filename) {
 		writer.on('error', reject)
 	})
 }
-
-module.exports.getBeatmaps = getBeatmaps
-module.exports.downloadBeatmap = downloadBeatmap

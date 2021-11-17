@@ -49,7 +49,7 @@ function findStatuses (args) {
 }
 
 // Detect the set ID and ID of beatmaps in links
-function findIDsFromLink (args) {
+module.exports.findIDsFromLink = (args) => {
 	let found = { beatmapSetID: -1, beatmapID: -1 }
 	let invalidUrls = get_urls(args.join(" "), { requireSchemeOrWww: false })
 	for (let invalidUrl of invalidUrls)
@@ -67,7 +67,7 @@ function findIDsFromLink (args) {
 }
 
 // Detect gamemodes and mods from the NP sentence
-function findGamemodesFromNP (args) {
+module.exports.findGamemodesFromNP = (args) => {
 	args = args.join(' ').split('+').join('-').split('-')
 	let found = { mods: [], gamemode: 'osu' }
 	let search = args.join(' ').match(/#.*\//)
@@ -84,6 +84,3 @@ function findGamemodesFromNP (args) {
 function isBeatmapID (arg, gamemode = null) {
 	return !isNaN(arg) && !arg.includes(',') && parseInt(arg) !== null && parseInt(arg) >= 1 && parseInt(arg) <= 10000000
 }
-
-module.exports.findIDsFromLink = findIDsFromLink
-module.exports.findGamemodesFromNP = findGamemodesFromNP

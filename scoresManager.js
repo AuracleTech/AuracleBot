@@ -1,5 +1,3 @@
-async function getTopScores (username) {
+exports.getTopScores = async (username) => {
     return
 }
-
-exports.getTopScores = getTopScores
