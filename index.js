@@ -33,7 +33,6 @@
 *
 *                                 TODO
 *
-* Create Temp folder on startup if missing
 * Deletes .osu files after calculating performances
 * Register Top Scores
 * Database Manager
@@ -54,6 +53,7 @@
 
 // Debug Mode - Disable the IRC & Enable Quick Consonle Command function
 const debugMode = false
+global.tempFolder = './temp/'
 
 // Importing Modules
 require('dotenv').config();
@@ -81,8 +81,9 @@ fs.readdir('./Commands/', (err, files) => {
     })
 })
 
-// Clean Temp folder
-for (let file of fs.readdirSync('./Temp')) if(file != '.keep') fs.unlinkSync(`./Temp/${file}`)
+// Managing Temporary folder
+if (!fs.existsSync(tempFolder)) fs.mkdirSync(tempFolder)
+for (let file of fs.readdirSync(tempFolder)) fs.unlinkSync(`${tempFolder}${file}`)
 
 
 // Register Bancho Events

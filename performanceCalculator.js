@@ -19,7 +19,7 @@ module.exports.calculatePerformance = async (mapID, gamemode, mods = []) => {
 
 async function launchPerformanceCalculator (filename, acc, gamemode, mods = []) {
 	return new Promise((resolve, reject) => {
-		let args = [ 'simulate', gamemode, '-a', acc, `./Temp/${filename}.osu`, '-j' ]
+		let args = [ 'simulate', gamemode, '-a', acc, `${tempFolder}${filename}.osu`, '-j' ]
 		for (let mod of mods) args.push('-m', enum_mods.getAbbreviation(mod).toLowerCase())
 	    const child = execFile('./osu-tools-master/PerformanceCalculator/bin/Release/net5.0/PerformanceCalculator.exe', args, (err, stdout, stderr) => {
         if (err) {

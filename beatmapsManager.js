@@ -32,7 +32,7 @@ async function getBeatmaps (beatmapSetId = null, beatmapId = null, gamemode = nu
 */
 async function downloadBeatmap (ID, filename) {
 	const url = `https://osu.ppy.sh/osu/${ID}`
-	const writer = fs.createWriteStream(`./Temp/${filename}.osu`)
+	const writer = fs.createWriteStream(`${tempFolder}${filename}.osu`)
 	const response = await axios({
 		url,
 		method: 'GET',

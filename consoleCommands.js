@@ -16,7 +16,7 @@ async function consoleCommand(input, client, debugMode) {
     return log('Command unavailable.', 1)
 }
 
-// Importing Modules Temporarily
+// Importing Laboratory Modules
 
 // Testting Laboratory
 async function laboratory (input, client, command, message, args) {
