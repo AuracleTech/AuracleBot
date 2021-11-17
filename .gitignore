@@ -1,6 +1,5 @@
 mysql.js
-config_kharnage1.json
-config_auracle.json
+.env
 node_modules
 DB_Maps
 DB_Settings

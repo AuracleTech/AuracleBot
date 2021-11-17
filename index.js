@@ -52,19 +52,19 @@
 */
 
 // Debug Mode - Disable the IRC & Enable Quick Consonle Command function
-const debugMode = true
+const debugMode = false
 
 // Importing Modules
+require('dotenv').config();
 const readline = require('readline').createInterface({ input: process.stdin, output: process.stdout })
 const customerCommand = require('./customerCommands.js').customerCommand
 const consoleCommand = require('./consoleCommands.js').consoleCommand
-const { USERNAME, PASSWORD } = require('./config.json')
 const log = require('./utils.js').log
 const Banchojs = require('bancho.js')
 const fs = require('fs')
 
 // Log in BanchoBot IRC
-const client = new Banchojs.BanchoClient({ username: USERNAME, password: PASSWORD })
+const client = new Banchojs.BanchoClient({ username: process.env.IRC_USERNAME, password: process.env.IRC_PASSWORD })
 client.commands = new Map()
 
 // Register Commands

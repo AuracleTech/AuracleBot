@@ -1,8 +1,7 @@
 // Importing Modules
 
-const { APIKEY } = require('./config.json')
 const node_osu = require('node-osu')
-var api_osu = new node_osu.Api(APIKEY, { notFoundAsError: false, completeScores: true })
+var api_osu = new node_osu.Api(process.env.APIKEY, { notFoundAsError: false, completeScores: true })
 const enum_gamemodes = require('./enums/gamemodes.js')
 const enum_mods = require('./enums/mods.js')
 const log = require('./utils.js').log
