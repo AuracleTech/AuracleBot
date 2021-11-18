@@ -17,7 +17,7 @@ module.exports.calculatePerformance = async (mapID, gamemode, mods = []) => {
 	return results
 }
 
-async function launchPerformanceCalculator (filename, acc, gamemode, mods = []) {
+launchPerformanceCalculator = async (filename, acc, gamemode, mods = []) => {
 	return new Promise((resolve, reject) => {
 		let args = [ 'simulate', gamemode, '-a', acc, `${tempFolder}${filename}.osu`, '-j' ]
 		for (let mod of mods) args.push('-m', enum_mods.getAbbreviation(mod).toLowerCase())

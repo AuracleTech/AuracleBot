@@ -11,14 +11,14 @@ exports.consoleCommand = async (input, client) => {
     let args = input.split(' ')
     let command = args[0].toLowerCase()
     args.shift()
-    if (client.commands.get(command)) return client.commands.get(command).run(instance, args, (function (msg) { log(msg, 1) }))
+    if (client.commands.get(command)) return client.commands.get(command).run(instance, args, msg => { log(msg, 1) })
     return laboratory(input, client, command, instance, args)
 }
 
-// Laboratory Modules
+// Temporary Modules
 
 
-async function laboratory (input, client, command, instance, args) {
+laboratory = async (input, client, command, instance, args) => {
     log('Initialization', 4)
 
     // Testing Laboratory

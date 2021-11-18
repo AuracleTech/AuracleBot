@@ -32,7 +32,7 @@
 *                              2021.10.18
 *
 *                                 TODO
-*
+* If customerCommands.customerCommand !onTopPlaysCooldown(username)) getTopScores(username)
 * Deletes .osu files after calculating performances
 * Register Top Scores
 * Database Manager
@@ -50,7 +50,7 @@
 *
 */
 
-// Debug Mode - Disable the IRC & Enable Quick Consonle Command function
+// Debug Mode - Disable the IRC until the bot is fully functional
 const debugMode = false
 global.tempFolder = './temp/'
 
@@ -88,11 +88,11 @@ for (let file of fs.readdirSync(tempFolder)) fs.unlinkSync(`${tempFolder}${file}
 if (!debugMode)
     client.connect().then(() => {
         log('Logged in')
-        client.on('PM', async (instance) => customerCommand(instance, client))
+        client.on('PM', async instance => customerCommand(instance, client))
     })
 
 // Command Consoles
-readline.on('line', async (input) => consoleCommand(input, client))
+readline.on('line', async input => consoleCommand(input, client))
 
 // Catch Exceptions
-process.on('uncaughtException', function(err) { log(`Caught exception: ${err.stack}`, 3) })
+process.on('uncaughtException', err => { log(`Caught exception: ${err.stack}`, 3) })

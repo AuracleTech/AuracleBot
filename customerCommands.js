@@ -9,7 +9,7 @@ var commandHistory = {}
 var prefix = '!'
 
 // Read Commands
-exports.customerCommand = (instance, client) =>{
+exports.customerCommand = (instance, client) => {
     if (instance.self) return
 
     getTopScores(instance.user.ircUsername)
@@ -27,19 +27,19 @@ exports.customerCommand = (instance, client) =>{
     return log(`eventsManager.customerCommand() ${instance.message}`, 2)
 }
 
-function doAction (client, instance) {
-    client.commands.get('np').run(instance, instance.getAction().split(' '), (function (message) { reply(instance, message) }))
+doAction = (client, instance) => {
+    client.commands.get('np').run(instance, instance.getAction().split(' '), message => { reply(instance, message) })
 }
 
-function reply (instance, message) {
+reply = (instance, message) => {
     log(`${process.env.IRC_USERNAME} replied : ${message}`)
     instance.user.sendMessage(message)
 }
 
-function doCommand (instance, client) {
+doCommand = (instance, client) => {
     let args = instance.message.slice(prefix.length).split(' ')
     let command = args[0].toLowerCase()
     args.shift()
-    if (client.commands.get(command)) return client.commands.get(command).run(instance, args, (function (message) { reply(instance, message) }))
+    if (client.commands.get(command)) return client.commands.get(command).run(instance, args, message => { reply(instance, message) })
     else return instance.user.sendMessage(`Command ${command} is nonexistent`)
 }

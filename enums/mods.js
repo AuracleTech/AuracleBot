@@ -41,20 +41,20 @@ exports.groups = {
 }
 
 exports.getBinary = (mod) => {
-    for (const [key, values] of Object.entries(binaries))
+    for (const [key, values] of Object.entries(this.binaries))
         for (let arg of values) if (arg.trim().toLowerCase() == mod.trim().toLowerCase()) return key
     return
 }
 
 exports.getFullname = (mod) => {
-    for (const [key, values] of Object.entries(binaries))
+    for (const [key, values] of Object.entries(this.binaries))
          for (let arg of values)
            if (key == mod || arg.trim().toLowerCase().includes(mod.trim().toLowerCase())) return values[0]
     return
 }
 
 exports.getAbbreviation = (mod) => {
-    for (const [key, values] of Object.entries(binaries))
+    for (const [key, values] of Object.entries(this.binaries))
         for (let arg of values)
             if (key == mod || arg.trim().toLowerCase().includes(mod.trim().toLowerCase())) return values[1]
     return
@@ -71,14 +71,14 @@ exports.hasHalfTime = (mods) => {
 }
 
 exports.doesAffectStarRating = (mod) => {
-    if (groups.AffectStarRating.includes(mod)) return true
+    if (this.groups.AffectStarRating.includes(mod)) return true
     return false
 }
 
 exports.rawToArray = (raw_mods) => {
     let mods = []
-    let sortedBinaries = Object.keys(binaries)
-    sortedBinaries.sort(function(a, b){return b - a})
+    let sortedBinaries = Object.keys(this.binaries)
+    sortedBinaries.sort((a, b) => { return b - a })
     sortedBinaries.pop()
     for (let binaryMod of sortedBinaries) if (raw_mods >= binaryMod) { mods.push(parseInt(binaryMod)); raw_mods = raw_mods - binaryMod; }
     return mods

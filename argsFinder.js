@@ -7,14 +7,14 @@ const get_urls = require('get-urls')
 var valid_url = require('valid-url')
 
 // Find IDs
-function findID (args) {
+findID = args => {
 	let found = []
 	for (let arg of args) if (isBeatmapID(arg)) found.push(arg)
 	return found
 }
 
 // Detect Gamemodes and Genres
-function findGamemodes (args) {
+findGamemodes = args => {
 	let found = {}
 	for (let arg of args) if (enum_gamemodes.isGamemode(arg)) found[arg] = []
 	for (let gamemode of Object.keys(found))
@@ -24,14 +24,14 @@ function findGamemodes (args) {
 }
 
 // Detect Mods
-function findMods (args) {
+findMods = args => {
 	let found = []
 	for (let arg of args) if (enum_mods.getBinary(arg)) found.push(arg)
 	return found
 }
 
 // Detect star rating
-function findRatings (args) {
+findRatings = args => {
 	let found = { min: 1, max: 20 }
 	for (let arg of args)
 		if (String(arg).includes('*'))
@@ -42,14 +42,14 @@ function findRatings (args) {
 }
 
 // Detect the statuses
-function findStatuses (args) {
+findStatuses = args => {
 	let states = [ 'loved', 'qualified', 'approved', 'ranked', 'pending', 'wip', 'graveyard' ]
 	for (let arg of args) if (states.includes(arg)) found.push(arg)
 	return found
 }
 
 // Detect the set ID and ID of beatmaps in links
-module.exports.findIDsFromLink = (args) => {
+module.exports.findIDsFromLink = args => {
 	let found = { beatmapSetID: -1, beatmapID: -1 }
 	let invalidUrls = get_urls(args.join(" "), { requireSchemeOrWww: false })
 	for (let invalidUrl of invalidUrls)
@@ -67,7 +67,7 @@ module.exports.findIDsFromLink = (args) => {
 }
 
 // Detect gamemodes and mods from the NP sentence
-module.exports.findGamemodesFromNP = (args) => {
+module.exports.findGamemodesFromNP = args => {
 	args = args.join(' ').split('+').join('-').split('-')
 	let found = { mods: [], gamemode: 'osu' }
 	let search = args.join(' ').match(/#.*\//)
@@ -81,6 +81,6 @@ module.exports.findGamemodesFromNP = (args) => {
 }
 
 // Check if arg could be a map ID
-function isBeatmapID (arg, gamemode = null) {
+isBeatmapID = (arg, gamemode = null) => {
 	return !isNaN(arg) && !arg.includes(',') && parseInt(arg) !== null && parseInt(arg) >= 1 && parseInt(arg) <= 10000000
 }
