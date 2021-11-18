@@ -1,10 +1,10 @@
 /**
 * Log the msg to console with an alert category
 * @param {Number} msg : the messaged desired to log
-* @param {Number} category : from 0 to 4, for Log, Debug, Warning, CRITICAL and Laboratory respectively
+* @param {Number} category : from 0 to 5, for Log, Debug, Warning, CRITICAL, Laboratory and Input respectively
 */
 module.exports.log = (msg, category = 0) => {
-	let prefix = { 0: '\x1b[32mLog ›', 1: '\x1b[36mDebug ›', 2: '\x1b[33mWarning ›', 3: '\x1b[31mCRITICAL ›', 4: '\x1b[95mLaboratory ›' }
+	let prefix = { 0: '\x1b[32mLog ›', 1: '\x1b[36mDebug ›', 2: '\x1b[33mWarning ›', 3: '\x1b[31mCRITICAL ›', 4: '\x1b[95mLaboratory ›', 5: '\x1b[95mInput >' }
 	console.log(`${this.getFormattedDate()} ${prefix[category]}\x1b[0m ${msg}`)
 }
 
