@@ -50,7 +50,7 @@ findStatuses = args => {
 // Detect the set ID and ID of beatmaps in links
 module.exports.findIDsFromLink = args => {
 	let found = { beatmapSetID: -1, beatmapID: -1 }
-	let invalidUrls = get_urls(args.join(" "), { requireSchemeOrWww: false })
+	let invalidUrls = get_urls(args.join(' '), { requireSchemeOrWww: false })
 	for (let invalidUrl of invalidUrls)
 		if (valid_url.isUri(invalidUrl)) {
 			let url = new URL(invalidUrl)
