@@ -32,13 +32,14 @@
 *                              2021.10.18
 *
 *                                 TODO
+* make scoresManager.getTopScores
+* Add proper description to db.get and upsert
 * If customerCommands.customerCommand !onTopPlaysCooldown(username)) getTopScores(username)
 * Deletes .osu files after calculating performances
 * Register Top Scores
 * Database Manager
 * CMD settings
 * CMD recommend
-* CMD complain
 * CMD bomb
 * CMD add
 * customerCommands.doAction Detect if another command than NP was used
@@ -47,7 +48,9 @@
 * customerCommands.doAction Better way of splitting into arguments
 *
 *                                TOTEST
-*
+* !c
+* !ping
+* !help
 */
 // Importing Modules
 require('dotenv').config();
