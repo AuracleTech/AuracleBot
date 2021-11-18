@@ -2,9 +2,9 @@
 
 const node_osu = require('node-osu')
 let api_osu = new node_osu.Api(process.env.API_KEY, { notFoundAsError: false, completeScores: true })
-const enum_gamemodes = require('./enums/gamemodes.js')
-const enum_mods = require('./enums/mods.js')
-const log = require('./utils.js').log
+const enum_gamemodes = require('./enums/gamemodes')
+const enum_mods = require('./enums/mods')
+const log = require('./utils').log
 const axios = require('axios')
 const fs = require('fs')
 

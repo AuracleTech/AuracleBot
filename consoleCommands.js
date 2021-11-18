@@ -1,9 +1,9 @@
 // Importing Modules
 
-const log = require('./utils.js').log
+const log = require('./utils').log
 
 // Read Commands
-exports.consoleCommand = async (input, client) => {
+module.exports = async (input, client) => {
     let instance = {}
     instance.user = []
     instance.user.ircUsername = process.env.IRC_USERNAME

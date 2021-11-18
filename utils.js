@@ -20,7 +20,7 @@ module.exports.getFormattedDate = () => {
 }
 
 // Returns a time format from seconds mm:ss
-module.exports.formatTimeFromSecs = (secs) => {
+module.exports.formatTimeFromSecs = secs => {
     let hh = Math.floor(secs / 60 / 60)
     let mm = Math.floor(secs / 60) - (hh * 60)
     let ss = secs % 60

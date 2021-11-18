@@ -1,10 +1,9 @@
 // Importing Modules
 
-const getBeatmaps = require('./beatmapsManager.js').getBeatmaps
-const enum_gamemodes = require('./enums/gamemodes.js')
-const enum_mods = require('./enums/mods.js')
+const enum_gamemodes = require('./enums/gamemodes')
+const enum_mods = require('./enums/mods')
 const get_urls = require('get-urls')
-var valid_url = require('valid-url')
+let valid_url = require('valid-url')
 
 // Find IDs
 findID = args => {

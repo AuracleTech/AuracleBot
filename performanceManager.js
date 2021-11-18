@@ -1,16 +1,16 @@
 // Importing Modules
 
-const downloadBeatmap = require('./beatmapsManager.js').downloadBeatmap
-const enum_mods = require('./enums/mods.js')
+const beatmapsManager = require('./beatmapsManager')
+const enum_mods = require('./enums/mods')
 const { exec } = require('child_process')
-const log = require('./utils.js').log
+const log = require('./utils').log
 const execFile = require('child_process').execFile
 
 module.exports.calculatePerformance = async (mapID, gamemode, mods = []) => {
 	let filename = new Date().getTime()
 	let accs = [100, 99, 98, 97, 95]
 	if (gamemode == 'mania') accs = [100]
-	let download = await downloadBeatmap(mapID, filename)
+	let download = await beatmapsManager.downloadBeatmap(mapID, filename)
 	let results = []
 	for (let acc of accs)
 		results.push(await launchPerformanceCalculator(filename, acc, gamemode, mods))

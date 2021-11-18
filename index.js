@@ -46,7 +46,7 @@
 * argsFinder.findGamemodesFromNP Change standard depending on the user's default settings
 * customerCommands.doAction Better way of splitting into arguments
 *
-*                                 TOTEST
+*                                TOTEST
 *
 */
 
@@ -57,9 +57,9 @@ global.tempFolder = './temp/'
 // Importing Modules
 require('dotenv').config();
 const readline = require('readline').createInterface({ input: process.stdin, output: process.stdout })
-const customerCommand = require('./customerCommands.js').customerCommand
-const consoleCommand = require('./consoleCommands.js').consoleCommand
-const log = require('./utils.js').log
+const customerCommands = require('./customerCommands')
+const consoleCommands = require('./consoleCommands')
+const log = require('./utils').log
 const Banchojs = require('bancho.js')
 const fs = require('fs')
 
@@ -88,11 +88,11 @@ for (let file of fs.readdirSync(tempFolder)) fs.unlinkSync(`${tempFolder}${file}
 if (!debugMode)
     client.connect().then(() => {
         log('Logged in')
-        client.on('PM', async instance => customerCommand(instance, client))
+        client.on('PM', async instance => customerCommands(instance, client))
     })
 
 // Command Consoles
-readline.on('line', async input => consoleCommand(input, client))
+readline.on('line', async input => consoleCommands(input, client))
 
 // Catch Exceptions
 process.on('uncaughtException', err => { log(`Caught exception: ${err.stack}`, 3) })

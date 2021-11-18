@@ -1,18 +1,19 @@
 // Importing Modules
-const getTopScores = require('./scoresManager.js').getTopScores
-const log = require('./utils.js').log
+
+const scoresManager = require('./scoresManager')
+const log = require('./utils').log
 
 // Variables
-var cooldown = new Set()
-var cooldownDelay = 3
-var commandHistory = {}
-var prefix = '!'
+let cooldown = new Set()
+let cooldownDelay = 3
+let commandHistory = {}
+let prefix = '!'
 
 // Read Commands
-exports.customerCommand = (instance, client) => {
+module.exports = (instance, client) => {
     if (instance.self) return
 
-    getTopScores(instance.user.ircUsername)
+    scoresManager.getTopScores(instance.user.ircUsername)
 
     if(!instance.getAction() && instance.message[0] != prefix) return
 
