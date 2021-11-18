@@ -3,3 +3,6 @@ node_modules
 osu-tools-master
 *.osu
 DB
+.vscode
+.git
+temp
