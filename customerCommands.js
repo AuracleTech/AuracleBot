@@ -6,7 +6,6 @@ const log = require('./utils').log
 // Variables
 let cooldown = new Set()
 let cooldownDelay = 3
-let commandHistory = {}
 let prefix = '!'
 
 // Read Commands
