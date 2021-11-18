@@ -1,5 +1,4 @@
 // Importing Modules
-
 const scoresManager = require('./scoresManager')
 const log = require('./utils').log
 
@@ -20,7 +19,7 @@ module.exports = (instance, client) => {
     setTimeout(() => { cooldown.delete(instance.user.ircUsername) }, 1e3 * cooldownDelay)
     cooldown.add(instance.user.ircUsername)
 
-    log(`${instance.user.ircUsername} used ${instance.getAction() ? 'ACTION' : 'CMD'} : ${instance.message}`)
+    log(`${instance.user.ircUsername} ${instance.getAction() ? 'action' : 'command'} : ${instance.message}`)
 
     if (instance.getAction()) return doAction(client, instance)
     if (instance.message[0] == prefix) return doCommand(instance, client)
@@ -32,7 +31,7 @@ doAction = (client, instance) => {
 }
 
 reply = (instance, message) => {
-    log(`${process.env.IRC_USERNAME} replied : ${message}`)
+    log(`${process.env.IRC_USERNAME} : ${message}`)
     instance.user.sendMessage(message)
 }
 
