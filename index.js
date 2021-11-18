@@ -52,7 +52,7 @@
 
 // Debug Mode - Disable the IRC until the bot is fully functional
 const debugMode = false
-global.tempFolder = './temp/'
+exports.tempFolder = './temp/'
 
 // Importing Modules
 require('dotenv').config();
@@ -81,8 +81,8 @@ fs.readdir('./Commands/', (err, files) => {
 })
 
 // Managing Temporary folder
-if (!fs.existsSync(tempFolder)) fs.mkdirSync(tempFolder)
-for (let file of fs.readdirSync(tempFolder)) fs.unlinkSync(`${tempFolder}${file}`)
+if (!fs.existsSync(this.tempFolder)) fs.mkdirSync(this.tempFolder)
+for (let file of fs.readdirSync(this.tempFolder)) fs.unlinkSync(`${this.tempFolder}${file}`)
 
 // Register Bancho Events
 if (!debugMode)
