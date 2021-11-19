@@ -63,10 +63,16 @@ const log = require('./utils').log
 const Banchojs = require('bancho.js')
 const fs = require('fs')
 const client = new Banchojs.BanchoClient({ username: process.env.IRC_USERNAME, password: process.env.IRC_PASSWORD })
+let PouchDB = require('pouchdb-node')
+PouchDB.plugin(require('pouchdb-upsert'))
 
 // Variables
 const disableIRC = false
 exports.tempFolder = './temp/'
+exports.db_scores = new PouchDB('DB/DB_Scores')
+exports.db_beatmaps = new PouchDB('DB/DB_Beatmaps')
+exports.db_settings = new PouchDB('DB/DB_Settings')
+exports.minimumCooldownTopScores = 2
 
 // Log in BanchoBot IRC
 client.commands = new Map()
