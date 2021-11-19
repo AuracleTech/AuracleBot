@@ -52,9 +52,11 @@
 * !ping
 * !help
 */
+
 // Importing Modules
 require('dotenv').config();
-const readline = require('readline').createInterface({ input: process.stdin, output: process.stdout })
+const readline = require('readline')
+const console = readline.createInterface({ input: process.stdin, output: process.stdout })
 const customerCommands = require('./customerCommands')
 const consoleCommands = require('./consoleCommands')
 const log = require('./utils').log
@@ -71,14 +73,14 @@ client.commands = new Map()
 
 // Register Commands
 fs.readdir('./Commands/', (err, files) => {
-    if (err) return log(err, 3)
-    let jsfile = files.filter(f => f.split('.').pop() === 'js')
-    if (jsfile.length <= 0) return log('No commands found', 3)
-    jsfile.forEach((f, i) => {
-        let props = require(`./Commands/${f}`)
-        client.commands.set(props.help.name, props)
-        client.commands.set(props.help.alias, props)
-        log(`Loaded ${f}`)
+    if (err) return log(`${this.filename}.fs.readdir ${err}`, 3)
+    let jsFiles = files.filter(file => file.split('.').pop() === 'js')
+    if (jsFiles.length <= 0) return log('No command files found', 3)
+    jsFiles.forEach(file => {
+        let cmdFile = require(`./Commands/${file}`)
+        client.commands.set(cmdFile.help.name, cmdFile)
+        client.commands.set(cmdFile.help.alias, cmdFile)
+        log(`Loaded ${file}`)
     })
 })
 
@@ -94,7 +96,11 @@ if (!disableIRC)
     })
 
 // Command Consoles
-readline.on('line', async input => consoleCommands(input, client))
+console.on('line', async input => {
+    readline.moveCursor(process.stdout, 0, -1)
+    readline.clearLine(process.stdout, 1)
+    consoleCommands(input, client)
+})
 
 // Catch Exceptions
-process.on('uncaughtException', err => { log(`Caught exception: ${err.stack}`, 3) })
+process.on('uncaughtException', err => log(`${this.filename}.uncaughtException ${err}`, 3))

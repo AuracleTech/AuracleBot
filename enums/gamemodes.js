@@ -8,7 +8,7 @@ exports.gamemodes = {
 exports.binaries = { 'osu': 0, 'taiko': 1, 'ctb': 2, 'mania': 3 }
 
 exports.getBinary = gamemode => {
-    for (const [key, values] of Object.entries(this.binaries)) if (key == gamemode) return this.binaries[key]
+    for (const key of Object.keys(this.binaries)) if (key == gamemode) return this.binaries[key]
     return
 }
 

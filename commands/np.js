@@ -1,5 +1,4 @@
 // Importing Modules
-
 const performanceManager = require('../performanceManager')
 const utils = require('../utils')
 const enum_mods = require('../enums/mods')
@@ -7,7 +6,7 @@ const argsFinder = require('../argsFinder')
 const beatmapsManager = require('../beatmapsManager')
 
 module.exports.help = { name: 'np', alias: 'n' }
-module.exports.run = async (instance, args, callback) => {
+module.exports.run = async (_instance, args, callback) => {
 	let IDs = argsFinder.findIDsFromLink(args)
 	if (IDs.beatmapID == -1) return callback(`Impossible to find any beatmap ID`)
 	let search = argsFinder.findGamemodesFromNP(args)
