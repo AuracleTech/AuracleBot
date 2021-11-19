@@ -24,13 +24,18 @@ module.exports.upsert = async (db, id, data) => {
 * @param {Number} id : the unique id of the document
 * @param {Array} args : array of keys to retrieve values from
 */
+module.exports.get = async (db, id, args = []) => {
+    return new Promise(resolve => {
         let data = {}
         db.get(id, (err, doc) => {
             if (err)
                 return resolve(null)
             else
-                for (const arg of args)
-                data[arg] = doc[arg]
+                if (args.length <= 0)
+                    data = doc
+                else
+                    for (const arg of args)
+                    data[arg] = doc[arg]
             return resolve(data)
         })
     })
