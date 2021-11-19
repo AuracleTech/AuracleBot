@@ -1,12 +1,14 @@
 // Importing Modules
-
-const node_osu = require('node-osu')
-let api_osu = new node_osu.Api(process.env.API_KEY, { notFoundAsError: false, completeScores: true })
+const db = require('./db')
+const index = require('./index')
 
 exports.getTopScores = async (username) => {
-    return
+    return await db.upsert(index.db_settings, username, { lastScoreGrabDate: new Date() })
 }
 
-registerScore = (score) => {
-    
+exports.isOnCooldown = async (username) => {
+    let data = await db.get(index.db_settings, username, [ 'lastScoreGrabDate' ])
+    if (!data) return false
+    let daysPassed = parseInt((new Date() - Date.parse(data.lastScoreGrabDate)) / (1000 * 60 * 60 * 24))
+    return daysPassed < index.minimumCooldownTopScores
 }

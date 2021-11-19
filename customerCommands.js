@@ -10,8 +10,8 @@ let prefix = '!'
 // Read Commands
 module.exports = async (instance, client) => {
     if (instance.self) return
-
-    scoresManager.getTopScores(instance.user.ircUsername)
+    
+    if (!await scoresManager.isOnCooldown(instance.user.ircUsername)) scoresManager.getTopScores(instance.user.ircUsername)
 
     if(!instance.getAction() && instance.message[0] != prefix) return
 
