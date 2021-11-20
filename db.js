@@ -1,6 +1,3 @@
-// Importing Modules
-const log = require('./utils').log
-
 /**
 * Upsert informations in a database using the given ID and the data
 * @param {PouchDB} db : the database to use
