@@ -1,5 +1,4 @@
 // Importing Modules
-
 const beatmapsManager = require('./beatmapsManager')
 const enum_mods = require('./enums/mods')
 const log = require('./utils').log

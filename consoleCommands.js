@@ -6,6 +6,7 @@ module.exports = async (input, client) => {
     let instance = {}
     instance.user = []
     instance.user.ircUsername = process.env.IRC_USERNAME
+    instance.user.id = process.env.OSU_USER_ID
     instance.message = input
     let args = input.split(' ')
     let command = args[0].toLowerCase()
