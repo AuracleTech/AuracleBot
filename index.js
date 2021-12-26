@@ -18,8 +18,6 @@ exports.db_scores = new PouchDB('DB/DB_Scores')
 exports.db_beatmaps = new PouchDB('DB/DB_Beatmaps')
 exports.db_settings = new PouchDB('DB/DB_Settings')
 exports.minimumCooldownTopScores = 2
-
-// Log in BanchoBot IRC
 client.commands = new Map()
 
 // Register Commands
@@ -39,7 +37,7 @@ fs.readdir('./Commands/', (err, files) => {
 if (!fs.existsSync(this.tempFolder)) fs.mkdirSync(this.tempFolder)
 for (let file of fs.readdirSync(this.tempFolder)) fs.unlinkSync(`${this.tempFolder}${file}`)
 
-// Register Bancho Events
+// Connection to bancho
 if (!disableIRC)
     client.connect().then(() => {
         log('Logged in')
