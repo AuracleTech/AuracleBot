@@ -7,7 +7,7 @@ const consoleCommands = require('./consoleCommands')
 const log = require('./utils').log
 const Banchojs = require('bancho.js')
 const fs = require('fs')
-const client = new Banchojs.BanchoClient({ username: process.env.IRC_USERNAME, password: process.env.IRC_PASSWORD })
+const client = new Banchojs.BanchoClient({ username: process.env.IRC_USERNAME, password: process.env.IRC_PASSWORD, apiKey: process.env.API_KEY, host: 'irc.ppy.sh', port: 6667, ssl: false })
 let PouchDB = require('pouchdb-node')
 PouchDB.plugin(require('pouchdb-upsert'))
 
