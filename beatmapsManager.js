@@ -4,7 +4,6 @@ let api_osu = new node_osu.Api(process.env.API_KEY, { notFoundAsError: false, co
 const enum_gamemodes = require('./enums/gamemodes')
 const axios = require('axios')
 const fs = require('fs')
-const index = require('./index')
 
 /**
 * Retrieve beatmaps using ID or SetID
@@ -30,7 +29,7 @@ module.exports.getBeatmaps = async (beatmapSetId = null, beatmapId = null, gamem
 */
 module.exports.downloadBeatmap = async (ID, filename) => {
 	const url = `https://osu.ppy.sh/osu/${ID}`
-	const writer = fs.createWriteStream(`${index.tempFolder}${filename}.osu`)
+	const writer = fs.createWriteStream(`${process.env.FOLDER_TEMP}${filename}.osu`)
 	const response = await axios({
 		url,
 		method: 'GET',

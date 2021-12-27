@@ -1,5 +1,5 @@
 // Importing Modules
-require('dotenv').config();
+require('dotenv').config()
 const readline = require('readline')
 const console = readline.createInterface({ input: process.stdin, output: process.stdout })
 const customerCommands = require('./customerCommands')
@@ -13,7 +13,6 @@ PouchDB.plugin(require('pouchdb-upsert'))
 
 // Variables
 const disableIRC = false
-exports.tempFolder = './temp/'
 exports.db_scores = new PouchDB('DB/DB_Scores')
 exports.db_beatmaps = new PouchDB('DB/DB_Beatmaps')
 exports.db_settings = new PouchDB('DB/DB_Settings')
@@ -34,8 +33,8 @@ fs.readdir('./Commands/', (err, files) => {
 })
 
 // Managing Temporary folder
-if (!fs.existsSync(this.tempFolder)) fs.mkdirSync(this.tempFolder)
-for (let file of fs.readdirSync(this.tempFolder)) fs.unlinkSync(`${this.tempFolder}${file}`)
+if (!fs.existsSync(process.env.FOLDER_TEMP)) fs.mkdirSync(process.env.FOLDER_TEMP)
+for (let file of fs.readdirSync(process.env.FOLDER_TEMP)) fs.unlinkSync(`${process.env.FOLDER_TEMP}${file}`)
 
 // Connection to bancho
 if (!disableIRC)
