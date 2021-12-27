@@ -1,22 +1,23 @@
-/**
-* Log the msg to console with an alert category
-* @param {Number} msg : the messaged desired to log
-* @param {Number} category : from 0 to 5, for Log, Debug, Warning, CRITICAL, Laboratory and Input respectively
-*/
-module.exports.log = (msg, category = 0) => {
-	let prefix = { 0: '\x1b[32mLog ›', 1: '\x1b[36mDebug ›', 2: '\x1b[33mWarning ›', 3: '\x1b[31mCRITICAL ›', 4: '\x1b[95mLaboratory ›', 5: '\x1b[95mInput >' }
-	console.log(`${this.getFormattedDate()} ${prefix[category]}\x1b[0m ${msg}`)
-}
+// Importing Modules
+const { Console } = require('console')
+const fs = require('fs')
+var moment = require('moment')
 
-// Returns the current date format yyyy-month-dd hh-mm
-module.exports.getFormattedDate = () => {
-	let today = new Date()
-	let yyyy = today.getFullYear()
-    let month = String(today.getMonth() + 1).padStart(2, '0')
-    let dd = String(today.getDate()).padStart(2, '0')
-    let hh = today.getHours()
-    let mm = String(today.getMinutes()).padStart(2, '0')
-    return `${yyyy}-${month}-${dd} ${hh}:${mm}`
+// Variables
+if (!fs.existsSync(process.env.FOLDER_LOGS)) fs.mkdirSync(process.env.FOLDER_LOGS)
+var logger = fs.createWriteStream(`${process.env.FOLDER_LOGS}${moment(new Date()).format('YYYY-MM-DD HH-mm-ss')}.log`, { flags : 'w' });
+
+/**
+* Log the msg to console with an alert level
+* @param {Number} msg : the messaged desired to log
+* @param {Number} level : warning level from 0 to 5, for Log, Debug, Warning, CRITICAL, Laboratory and Input respectively
+*/
+module.exports.log = (msg, level = 0) => {
+	let colors = { 0: '\x1b[32m', 1: '\x1b[36m', 2: '\x1b[33m', 3: '\x1b[31m', 4: '\x1b[95m', 5: '\x1b[95m', '-1': '\x1b[0m' }
+	let prefix = { 0: 'Log', 1: 'Debug', 2: 'Warning', 3: 'CRITICAL', 4: 'Laboratory', 5: 'Input' }
+    let date = moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+    console.log(`${date} ${colors[level]}${prefix[level]} >${colors[-1]} ${msg}`)
+    logger.write(`${date} ${prefix[level]} > ${msg}\n`)
 }
 
 // Returns a time format from seconds mm:ss
