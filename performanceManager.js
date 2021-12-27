@@ -20,11 +20,12 @@ launchPerformanceCalculator = async (filename, acc, gamemode, mods = []) => {
 		let args = [ 'simulate', gamemode, '-a', acc, `${process.env.FOLDER_TEMP}${filename}.osu`, '-j' ]
 		for (let mod of mods) args.push('-m', enum_mods.getAbbreviation(mod).toLowerCase())
 	    execFile('./osu-tools-master/PerformanceCalculator/bin/Release/net5.0/PerformanceCalculator.exe', args, (err, stdout, stderr) => {
-        if (err) {
-			log(`${this.filename}.launchPerformanceCalculator ${stderr}`, 3)
-			return reject(stderr)
-        }
-        return resolve(JSON.parse(stdout))
+			fs.unlinkSync(`${index.tempFolder}${filename}.osu`)
+			if (err) {
+				log(`${this.filename}.launchPerformanceCalculator ${stderr}`, 3)
+				return reject(stderr)
+			}
+			return resolve(JSON.parse(stdout))
 	    })
 	})
 }

@@ -11,7 +11,9 @@ let prefix = '!'
 module.exports = async (instance, client) => {
     if (instance.self) return
     
-    if (!await scoresManager.isOnCooldown(instance.user.ircUsername)) scoresManager.getTopScores(instance.user.ircUsername)
+    await instance.user.fetchFromAPI()
+
+    if (!await scoresManager.isOnCooldown(instance.user)) scoresManager.getTopScores(instance.user)
 
     if(!instance.getAction() && instance.message[0] != prefix) return
 

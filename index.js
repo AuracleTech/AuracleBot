@@ -7,7 +7,7 @@ const consoleCommands = require('./consoleCommands')
 const log = require('./utils').log
 const Banchojs = require('bancho.js')
 const fs = require('fs')
-const client = new Banchojs.BanchoClient({ username: process.env.IRC_USERNAME, password: process.env.IRC_PASSWORD })
+const client = new Banchojs.BanchoClient({ username: process.env.IRC_USERNAME, password: process.env.IRC_PASSWORD, apiKey: process.env.API_KEY, host: 'irc.ppy.sh', port: 6667, ssl: false })
 let PouchDB = require('pouchdb-node')
 PouchDB.plugin(require('pouchdb-upsert'))
 
@@ -17,8 +17,6 @@ exports.db_scores = new PouchDB('DB/DB_Scores')
 exports.db_beatmaps = new PouchDB('DB/DB_Beatmaps')
 exports.db_settings = new PouchDB('DB/DB_Settings')
 exports.minimumCooldownTopScores = 2
-
-// Log in BanchoBot IRC
 client.commands = new Map()
 
 // Register Commands
@@ -38,7 +36,7 @@ fs.readdir('./Commands/', (err, files) => {
 if (!fs.existsSync(process.env.FOLDER_TEMP)) fs.mkdirSync(process.env.FOLDER_TEMP)
 for (let file of fs.readdirSync(process.env.FOLDER_TEMP)) fs.unlinkSync(`${process.env.FOLDER_TEMP}${file}`)
 
-// Register Bancho Events
+// Connection to bancho
 if (!disableIRC)
     client.connect().then(() => {
         log('Logged in')
