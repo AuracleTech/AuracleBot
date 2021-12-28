@@ -6,3 +6,4 @@ DB
 .vscode
 .git
 temp
+*.log
